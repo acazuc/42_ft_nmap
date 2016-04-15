@@ -9,9 +9,10 @@
 # include <arpa/inet.h>
 # include <sys/types.h>
 # include <linux/ip.h>
-# include <netdb.h>
+# include <pthread.h>
 # include <stdlib.h>
 # include <unistd.h>
+# include <netdb.h>
 # include <fcntl.h>
 # include <stdio.h>
 
@@ -19,6 +20,7 @@ typedef struct s_env t_env;
 typedef struct s_host t_host;
 typedef struct s_tcp_packet t_tcp_packet;
 typedef struct s_udp_packet t_udp_packet;
+typedef struct s_thread_arg t_thread_arg;
 
 struct s_env
 {
@@ -61,6 +63,14 @@ struct s_udp_packet
 	struct udphdr udp_header;
 };
 
+struct s_thread_arg
+{
+  t_env *env;
+  t_host *host;
+  int total_threads;
+  int thread_id;
+};
+
 void env_default(t_env *env);
 void env_init(t_env *env);
 char *file_get_contents(char *file);
@@ -86,5 +96,6 @@ void forge_tcphdr_ack(struct tcphdr *header, int16_t port);
 void forge_tcphdr_fin(struct tcphdr *header, int16_t port);
 void forge_tcphdr_xmas(struct tcphdr *header, int16_t port);
 void forge_udphdr(struct udphdr *header, int16_t port);
+void *thread_run(void *data);
 
 #endif

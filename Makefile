@@ -42,6 +42,7 @@ SRCS_NAME = main.c \
 			forge_iphdr.c \
 			forge_tcphdr.c \
 			forge_udphdr.c \
+			thread_run.c \
 
 SRCS = $(addprefix $(SRCS_PATH), $(SRCS_NAME))
 
@@ -51,7 +52,7 @@ OBJS_NAME = $(SRCS_NAME:.c=.o)
 
 OBJS = $(addprefix $(OBJS_PATH), $(OBJS_NAME))
 
-LIBRARY = -L libft/ -lft
+LIBRARY = -L libft/ -lft -lpthread
 
 all: odir $(NAME)
 
