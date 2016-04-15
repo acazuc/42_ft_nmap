@@ -12,9 +12,9 @@ int main(int ac, char **av)
   print_debug(&env);
   build_hosts(&env);
   int i = 0;
-  while (env.ips[i])
+  while (env.hosts[i])
   {
-    scan_host(&env, env.ips[i]);
+    scan_host(&env, env.hosts[i]);
     i++;
   }
 }

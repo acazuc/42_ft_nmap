@@ -34,7 +34,7 @@ static int build_tcp(t_host *host)
 	{
 		ft_putstr_fd("ft_nmap: can't resolve '", 2);
 		ft_putstr_fd(host->host, 2);
-		ft_putendl_fd("' tcp host", 2);
+		ft_putendl_fd("' host", 2);
 		return (0);
 	}
 	return (1);
@@ -46,7 +46,7 @@ static int build_udp(t_host *host)
 	{
 		ft_putstr_fd("ft_nmap: can't resolve '", 2);
 		ft_putstr_fd(host->host, 2);
-		ft_putendl_fd("' udp host", 2);
+		ft_putendl_fd("' host", 2);
 		return (0);
 	}
 	return (1);

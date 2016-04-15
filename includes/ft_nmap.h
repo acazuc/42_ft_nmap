@@ -72,7 +72,7 @@ void print_help(void);
 int valid_port(char *port);
 void env_check_port_number(t_env *env);
 int get_ports_number(t_env *env);
-void scan_host(t_env *env, char *host);
+void scan_host(t_env *env, t_host *host);
 void print_debug(t_env *env);
 void build_hosts(t_env *env);
 void push_host(t_env *env, t_host *host);
