@@ -2,18 +2,18 @@
 
 static void init_buff_result(char **buff, char **result)
 {
-  if (!(buff = malloc(sizeof(*buff) * 1001)))
+  if (!(*buff = malloc(sizeof(**buff) * 1001)))
   {
     ft_putendl_fd("ft_nmap: can't malloc file buffer", 2);
     exit(EXIT_FAILURE);
   }
-  if (!(result = malloc(sizeof(*result))))
+  if (!(*result = malloc(sizeof(**result))))
   {
     ft_putendl_fd("ft_nmap: can't malloc file content", 2);
     exit(EXIT_FAILURE);
   }
-  result[0] = '\0';
-  ft_bzero(buff, 1001);
+  *result[0] = '\0';
+  ft_bzero(*buff, 1001);
 }
 
 char *file_get_contents(char *file)

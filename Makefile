@@ -32,6 +32,7 @@ SRCS_NAME = main.c \
 			parse_speedup.c \
 			print_help.c \
 			valid_port.c \
+			env_check_port_number.c \
 
 SRCS = $(addprefix $(SRCS_PATH), $(SRCS_NAME))
 

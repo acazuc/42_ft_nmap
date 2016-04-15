@@ -7,6 +7,7 @@ int main(int ac, char **av)
   env_init(&env);
   parse_params(&env, ac, av);
   env_default(&env);
+  env_check_port_number(&env);
   ft_putendl("ips: ");
   int i = 0;
   while (env.ips[i])

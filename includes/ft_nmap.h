@@ -5,6 +5,7 @@
 # include <stdlib.h>
 # include <unistd.h>
 # include <fcntl.h>
+# include <stdio.h>
 
 typedef struct s_env t_env;
 
@@ -35,5 +36,6 @@ void parse_scan(t_env *env, char *scans);
 void parse_speedup(t_env *env, char *speedup);
 void print_help(void);
 int valid_port(char *port);
+void env_check_port_number(t_env *env);
 
 #endif
