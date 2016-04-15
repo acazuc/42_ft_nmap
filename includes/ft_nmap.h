@@ -17,6 +17,8 @@
 
 typedef struct s_env t_env;
 typedef struct s_host t_host;
+typedef struct s_tcp_packet t_tcp_packet;
+typedef struct s_udp_packet t_udp_packet;
 
 struct s_env
 {
@@ -26,7 +28,7 @@ struct s_env
   int threads_nb;
   char type_syn;
   char type_null;
-  char type_acl;
+  char type_ack;
   char type_fin;
   char type_xmas;
   char type_udp;
@@ -76,5 +78,13 @@ void scan_host(t_env *env, t_host *host);
 void print_debug(t_env *env);
 void build_hosts(t_env *env);
 void push_host(t_env *env, t_host *host);
+uint16_t ip_checksum(void *addr, size_t len);
+void forge_iphdr(struct iphdr *header, int protocol, int pton_addr, size_t packlen);
+void forge_tcphdr_syn(struct tcphdr *header, int16_t port);
+void forge_tcphdr_null(struct tcphdr *header, int16_t port);
+void forge_tcphdr_ack(struct tcphdr *header, int16_t port);
+void forge_tcphdr_fin(struct tcphdr *header, int16_t port);
+void forge_tcphdr_xmas(struct tcphdr *header, int16_t port);
+void forge_udphdr(struct udphdr *header, int16_t port);
 
 #endif

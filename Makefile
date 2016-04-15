@@ -38,6 +38,10 @@ SRCS_NAME = main.c \
 			print_debug.c \
 			build_hosts.c \
 			push_host.c \
+			ip_checksum.c \
+			forge_iphdr.c \
+			forge_tcphdr.c \
+			forge_udphdr.c \
 
 SRCS = $(addprefix $(SRCS_PATH), $(SRCS_NAME))
 

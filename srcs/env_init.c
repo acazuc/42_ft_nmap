@@ -26,7 +26,7 @@ static void init_types(t_env *env)
 {
   env->type_syn = 0;
   env->type_null = 0;
-  env->type_acl = 0;
+  env->type_ack = 0;
   env->type_fin = 0;
   env->type_xmas = 0;
   env->type_udp = 0;

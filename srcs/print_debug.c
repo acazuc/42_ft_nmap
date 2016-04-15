@@ -20,8 +20,8 @@ static void print_scans(t_env *env)
     ft_putstr(" SYN");
   if (env->type_null)
     ft_putstr(" NULL");
-  if (env->type_acl)
-    ft_putstr(" ACL");
+  if (env->type_ack)
+    ft_putstr(" ACK");
   if (env->type_fin)
     ft_putstr(" FIN");
   if (env->type_xmas)

@@ -28,11 +28,30 @@ static int resolve_destination(t_host *host, int protocol, struct sockaddr **add
 	return (1);
 }
 
+static int build_socket(int *sock, int protocol)
+{
+	int val;
+
+	if ((*sock = socket(AF_INET, SOCK_RAW, protocol)) == -1)
+		return (0);
+	val = 1;
+	if (setsockopt(*sock, IPPROTO_IP, IP_HDRINCL, &val, sizeof(val)) == -1)
+		return (0);
+	return (1);
+}
+
 static int build_tcp(t_host *host)
 {
 	if (!resolve_destination(host, IPPROTO_TCP, &host->addr_tcp, &host->addrlen_tcp))
 	{
 		ft_putstr_fd("ft_nmap: can't resolve '", 2);
+		ft_putstr_fd(host->host, 2);
+		ft_putendl_fd("' host", 2);
+		return (0);
+	}
+	if (!build_socket(&host->socket_tcp, IPPROTO_TCP))
+	{
+		ft_putstr_fd("ft_nmap: can't connect to '", 2);
 		ft_putstr_fd(host->host, 2);
 		ft_putendl_fd("' host", 2);
 		return (0);
@@ -45,6 +64,13 @@ static int build_udp(t_host *host)
 	if (!resolve_destination(host, IPPROTO_UDP, &host->addr_udp, &host->addrlen_udp))
 	{
 		ft_putstr_fd("ft_nmap: can't resolve '", 2);
+		ft_putstr_fd(host->host, 2);
+		ft_putendl_fd("' host", 2);
+		return (0);
+	}
+	if (!build_socket(&host->socket_udp, IPPROTO_UDP))
+	{
+		ft_putstr_fd("ft_nmap: can't connect to '", 2);
 		ft_putstr_fd(host->host, 2);
 		ft_putendl_fd("' host", 2);
 		return (0);
@@ -66,7 +92,7 @@ void build_hosts(t_env *env)
 			exit(EXIT_FAILURE);
 		}
 		host->host = env->ips[i];
-		if (env->type_syn || env->type_null || env->type_acl || env->type_fin || env->type_xmas)
+		if (env->type_syn || env->type_null || env->type_ack || env->type_fin || env->type_xmas)
 			if (!build_tcp(host))
 			{
 				free(host);

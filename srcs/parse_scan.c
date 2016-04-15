@@ -6,8 +6,8 @@ static void add_scan(t_env *env, char *scan)
     env->type_syn = 1;
   else if (!ft_strcmp(scan, "NULL"))
     env->type_null = 1;
-  else if (!ft_strcmp(scan, "ACL"))
-    env->type_acl = 1;
+  else if (!ft_strcmp(scan, "ACK"))
+    env->type_ack = 1;
   else if (!ft_strcmp(scan, "FIN"))
     env->type_fin = 1;
   else if (!ft_strcmp(scan, "XMAS"))

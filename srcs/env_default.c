@@ -16,7 +16,7 @@ static void define_scans(t_env *env)
 {
   env->type_syn = 1;
   env->type_null = 1;
-  env->type_acl = 1;
+  env->type_ack = 1;
   env->type_fin = 1;
   env->type_xmas = 1;
   env->type_udp = 1;
