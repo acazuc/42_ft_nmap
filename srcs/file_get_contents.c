@@ -16,6 +16,33 @@ static void init_buff_result(char **buff, char **result)
   ft_bzero(*buff, 1001);
 }
 
+static ssize_t loop_read(char **result, char **buff, int fd)
+{
+  ssize_t readed;
+
+  while ((readed = read(fd, *buff, 1000)) > 0)
+  {
+    if (!(*result = ft_strjoin_free1(*result, *buff)))
+    {
+      ft_putendl_fd("ft_mnap: can't malloc file content", 2);
+      exit(EXIT_FAILURE);
+    }
+    ft_bzero(*buff, 1001);
+  }
+  return (readed);
+}
+
+static void check_error(ssize_t readed, char *file)
+{
+  if (readed == -1)
+  {
+    ft_putstr_fd("ft_nmap: error while reading '", 2);
+    ft_putstr_fd(file, 2);
+    ft_putendl_fd("' file", 2);
+    exit(EXIT_FAILURE);
+  }
+}
+
 char *file_get_contents(char *file)
 {
   ssize_t readed;
@@ -33,22 +60,8 @@ char *file_get_contents(char *file)
   buff = NULL;
   result = NULL;
   init_buff_result(&buff ,&result);
-  while ((readed = read(fd, buff, 1000)) > 0)
-  {
-    if (!(result = ft_strjoin_free1(result, buff)))
-    {
-      ft_putendl_fd("ft_mnap: can't malloc file content", 2);
-      exit(EXIT_FAILURE);
-    }
-    ft_bzero(buff, 1001);
-  }
-  if (readed == -1)
-  {
-    ft_putstr_fd("ft_nmap: error while reading '", 2);
-    ft_putstr_fd(file, 2);
-    ft_putendl_fd("' file", 2);
-    exit(EXIT_FAILURE);
-  }
+  readed = loop_read(&result, &buff, fd);
+  check_error(readed, file);
   free(buff);
   return (result);
 }

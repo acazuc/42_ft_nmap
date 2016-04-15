@@ -32,6 +32,11 @@ void parse_scan(t_env *env, char *scans)
     ft_putendl_fd("ft_nmap: can't split scans value", 2);
     exit(EXIT_FAILURE);
   }
+  if (!(splitted[0]))
+  {
+    ft_putendl_fd("ft_nmap: must specify at least one scan type", 2);
+    exit(EXIT_FAILURE);
+  }
   i = 0;
   while (splitted[i])
   {
