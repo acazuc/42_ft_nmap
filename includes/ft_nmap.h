@@ -2,15 +2,25 @@
 # define FT_NMAP_H
 
 # include "../libft/includes/libft.h"
+# include <sys/socket.h>
+# include <netinet/in.h>
+# include <linux/tcp.h>
+# include <linux/udp.h>
+# include <arpa/inet.h>
+# include <sys/types.h>
+# include <linux/ip.h>
+# include <netdb.h>
 # include <stdlib.h>
 # include <unistd.h>
 # include <fcntl.h>
 # include <stdio.h>
 
 typedef struct s_env t_env;
+typedef struct s_host t_host;
 
 struct s_env
 {
+  t_host **hosts;
   char **ips;
   char ports[65536];
   int threads_nb;
@@ -23,6 +33,30 @@ struct s_env
   char defined_ports;
   char defined_speedup;
   char defined_scans;
+};
+
+struct s_host
+{
+  char *host;
+  char *ip;
+  int socket_tcp;
+  int socket_udp;
+  struct sockaddr *addr_tcp;
+  struct sockaddr *addr_udp;
+	size_t addrlen_tcp;
+	size_t addrlen_udp;
+};
+
+struct s_tcp_packet
+{
+  struct iphdr ip_header;
+	struct tcphdr tcp_header;
+};
+
+struct s_udp_packet
+{
+  struct iphdr ip_header;
+	struct udphdr udp_header;
 };
 
 void env_default(t_env *env);
@@ -39,5 +73,8 @@ int valid_port(char *port);
 void env_check_port_number(t_env *env);
 int get_ports_number(t_env *env);
 void scan_host(t_env *env, char *host);
+void print_debug(t_env *env);
+void build_hosts(t_env *env);
+void push_host(t_env *env, t_host *host);
 
 #endif
