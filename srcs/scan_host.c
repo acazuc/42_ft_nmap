@@ -19,18 +19,20 @@ static void run_threads(t_env *env, t_host *host)
       ft_putendl_fd("ft_nmap: can't create thread", 2);
       exit(EXIT_FAILURE);
     }
+      pthread_join(threads[i], NULL);
     i++;
   }
   i = 0;
   while (i < thread_nb)
   {
-    pthread_join(threads[i], NULL);
+    //pthread_join(threads[i], NULL);
     i++;
   }
 }
 
 void scan_host(t_env *env, t_host *host)
 {
+  ft_putchar('\n');
   ft_putstr("Scanning ");
   ft_putstr(host->ip);
   if (ft_strcmp(host->ip, host->host))
