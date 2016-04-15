@@ -97,5 +97,6 @@ void forge_tcphdr_fin(struct tcphdr *header, int16_t port);
 void forge_tcphdr_xmas(struct tcphdr *header, int16_t port);
 void forge_udphdr(struct udphdr *header, int16_t port);
 void *thread_run(void *data);
+void scan_port(t_thread_arg *thread_arg, int port);
 
 #endif

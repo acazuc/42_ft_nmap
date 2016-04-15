@@ -43,6 +43,7 @@ SRCS_NAME = main.c \
 			forge_tcphdr.c \
 			forge_udphdr.c \
 			thread_run.c \
+			scan_port.c \
 
 SRCS = $(addprefix $(SRCS_PATH), $(SRCS_NAME))
 

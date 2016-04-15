@@ -38,8 +38,7 @@ void *thread_run(void *data)
   {
     if (ports[i])
     {
-      ft_putnbr(i);
-      ft_putchar('\n');
+      scan_port(thread_arg, i);
     }
     i++;
   }
