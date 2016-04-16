@@ -30,6 +30,7 @@ static int resolve_destination(t_host *host, int protocol, struct sockaddr **add
 
 static int build_socket(int *sock, int protocol)
 {
+	struct timeval tv;
 	int val;
 
 	if ((*sock = socket(AF_INET, SOCK_RAW, protocol)) == -1)
@@ -37,6 +38,10 @@ static int build_socket(int *sock, int protocol)
 	val = 1;
 	if (setsockopt(*sock, IPPROTO_IP, IP_HDRINCL, &val, sizeof(val)) == -1)
 		return (0);
+	tv.tv_sec = 1;
+  tv.tv_usec = 0;
+  if (setsockopt(*sock, SOL_SOCKET, SO_RCVTIMEO, &tv, sizeof(tv)) < 0)
+      return (0);
 	return (1);
 }
 

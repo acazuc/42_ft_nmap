@@ -6,7 +6,7 @@
 #    By: acazuc <acazuc@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2015/11/25 06:50:12 by acazuc            #+#    #+#              #
-#    Updated: 2016/04/13 15:53:21 by acazuc           ###   ########.fr        #
+#    Updated: 2016/04/16 14:46:36 by acazuc           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -44,6 +44,11 @@ SRCS_NAME = main.c \
 			forge_udphdr.c \
 			thread_run.c \
 			scan_port.c \
+			tcp_checksum.c \
+			scan_port_tcp.c \
+			scan_port_tcp_finished.c \
+			scan_port_tcp_set_result.c \
+			epoch_micro.c \
 
 SRCS = $(addprefix $(SRCS_PATH), $(SRCS_NAME))
 
@@ -53,7 +58,7 @@ OBJS_NAME = $(SRCS_NAME:.c=.o)
 
 OBJS = $(addprefix $(OBJS_PATH), $(OBJS_NAME))
 
-LIBRARY = -L libft/ -lft -lpthread
+LIBRARY = -L libft/ -lft -lpthread -lpcap
 
 all: odir $(NAME)
 
