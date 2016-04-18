@@ -56,6 +56,9 @@ SRCS_NAME = main.c \
 			get_scan_type_number.c \
 			get_service_name.c \
 			debug.c \
+			udp_checksum.c \
+			scan_port_udp.c \
+			scan_port_udp_finished.c \
 
 SRCS = $(addprefix $(SRCS_PATH), $(SRCS_NAME))
 

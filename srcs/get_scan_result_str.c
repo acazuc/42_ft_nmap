@@ -6,7 +6,7 @@ char *get_scan_result_str(char *type, t_port_status result)
   char *rslt;
 
   status = "";
-  if (result == OPENED)
+  if (result == OPEN)
     status = "Opened";
   else if (result == FILTERED)
     status = "Filtered";
@@ -14,7 +14,7 @@ char *get_scan_result_str(char *type, t_port_status result)
     status = "Closed";
   else if (result == UNFILTERED)
     status = "Unfiltered";
-  else if (result == OPENED_FILTERED)
+  else if (result == OPEN_FILTERED)
     status = "Open|Filtered";
   if (!(rslt = malloc(strlen(type) + strlen(status) + 3)))
   {

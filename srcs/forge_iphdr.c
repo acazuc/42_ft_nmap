@@ -7,7 +7,7 @@ void forge_iphdr(struct iphdr *header, int protocol, int pton_addr, size_t packl
 	header->ihl = 5;
 	header->tos = 16;
 	header->tot_len = packlen;
-	header->id = 1;
+	header->id = epoch_micro();
 	header->frag_off = 0;
 	header->ttl = 255;
 	header->protocol = protocol;

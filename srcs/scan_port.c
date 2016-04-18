@@ -1,19 +1,5 @@
 #include "ft_nmap.h"
 
-static void scan_port_udp(t_thread_arg *thread_arg, struct iphdr *ip_header, int port)
-{
-  t_udp_packet packet;
-
-  packet.ip_header = *ip_header;
-  forge_udphdr(&packet.udp_header, port);
-  if (sendto(thread_arg->host->socket_udp, &packet, sizeof(packet), 0, thread_arg->host->addr_udp, thread_arg->host->addrlen_udp) == -1)
-  {
-    ft_putendl_fd("ft_nmap: failed to send packet", 2);
-    perror("ft_nmap");
-    exit(EXIT_FAILURE);
-  }
-}
-
 void scan_port(t_thread_arg *thread_arg, int port)
 {
   struct iphdr ip_header;

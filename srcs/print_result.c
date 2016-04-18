@@ -28,6 +28,8 @@ static void print_result_port_mult(t_env *env, t_port_result *result, int port)
     print_result_port_mult_part("FIN", result->status_fin, ++i);
   if (env->type_xmas)
     print_result_port_mult_part("XMAS", result->status_xmas, ++i);
+  if (env->type_udp)
+    print_result_port_mult_part("UDP", result->status_udp, ++i);
   printf("%-10s\n", get_scan_conclusion(env, result));
 }
 

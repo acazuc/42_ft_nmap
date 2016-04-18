@@ -7,28 +7,28 @@ void scan_port_tcp_set_result(t_port_result *result, char *type, t_tcp_packet *p
     if (!received)
       result->status_syn = FILTERED;
     else if (packet->tcp_header.syn && packet->tcp_header.ack)
-      result->status_syn = OPENED;
+      result->status_syn = OPEN;
     else
       result->status_syn = CLOSED;
   }
   else if (!ft_strcmp(type, "FIN"))
   {
     if (!received)
-      result->status_fin = OPENED_FILTERED;
+      result->status_fin = OPEN_FILTERED;
     else
       result->status_fin = CLOSED;
   }
   else if (!ft_strcmp(type, "XMAS"))
   {
     if (!received)
-      result->status_xmas = OPENED_FILTERED;
+      result->status_xmas = OPEN_FILTERED;
     else
       result->status_xmas = CLOSED;
   }
   else if (!ft_strcmp(type, "NULL"))
   {
     if (!received)
-      result->status_null = OPENED_FILTERED;
+      result->status_null = OPEN_FILTERED;
     else
       result->status_null = CLOSED;
   }
@@ -37,6 +37,6 @@ void scan_port_tcp_set_result(t_port_result *result, char *type, t_tcp_packet *p
     if (!received)
       result->status_ack = FILTERED;
     else
-      result->status_ack = OPENED;
+      result->status_ack = UNFILTERED;
   }
 }

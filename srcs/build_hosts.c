@@ -38,8 +38,8 @@ static int build_socket(int *sock, int protocol)
 	val = 1;
 	if (setsockopt(*sock, IPPROTO_IP, IP_HDRINCL, &val, sizeof(val)) == -1)
 		return (0);
-	tv.tv_sec = 1;
-  tv.tv_usec = 0;
+	tv.tv_sec = 0;
+  tv.tv_usec = 100000;
   if (setsockopt(*sock, SOL_SOCKET, SO_RCVTIMEO, &tv, sizeof(tv)) < 0)
       return (0);
 	return (1);
@@ -83,6 +83,25 @@ static int build_udp(t_host *host)
 	return (1);
 }
 
+static int build_icmp(t_host *host)
+{
+	if (!resolve_destination(host, IPPROTO_ICMP, &host->addr_icmp, &host->addrlen_icmp))
+	{
+		ft_putstr_fd("ft_nmap: can't resolve '", 2);
+		ft_putstr_fd(host->host, 2);
+		ft_putendl_fd("' host", 2);
+		return (0);
+	}
+	if (!build_socket(&host->socket_icmp, IPPROTO_ICMP))
+	{
+		ft_putstr_fd("ft_nmap: can't connect to '", 2);
+		ft_putstr_fd(host->host, 2);
+		ft_putendl_fd("' host", 2);
+		return (0);
+	}
+	return (1);
+}
+
 void build_hosts(t_env *env)
 {
 	t_host *host;
@@ -105,12 +124,20 @@ void build_hosts(t_env *env)
 				continue;
 			}
 		if (env->type_udp)
+		{
 			if (!build_udp(host))
 			{
 				free(host);
 				i++;
 				continue;
 			}
+			if (!build_icmp(host))
+			{
+				free(host);
+				i++;
+				continue;
+			}
+		}
 		push_host(env, host);
 		i++;
 	}

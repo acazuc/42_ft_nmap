@@ -4,6 +4,7 @@
 # include "../libft/includes/libft.h"
 # include <sys/socket.h>
 # include <netinet/in.h>
+# include <linux/icmp.h>
 # include <linux/tcp.h>
 # include <linux/udp.h>
 # include <arpa/inet.h>
@@ -23,6 +24,7 @@ typedef struct s_env t_env;
 typedef struct s_host t_host;
 typedef struct s_tcp_packet t_tcp_packet;
 typedef struct s_udp_packet t_udp_packet;
+typedef struct s_icmp_packet t_icmp_packet;
 typedef struct s_thread_arg t_thread_arg;
 typedef enum e_port_status t_port_status;
 typedef struct s_port_result t_port_result;
@@ -46,11 +48,11 @@ struct s_env
 
 enum e_port_status
 {
-  OPENED,
+  OPEN,
   FILTERED,
   CLOSED,
   UNFILTERED,
-  OPENED_FILTERED
+  OPEN_FILTERED
 };
 
 struct s_port_result
@@ -69,10 +71,13 @@ struct s_host
   char *ip;
   int socket_tcp;
   int socket_udp;
+  int socket_icmp;
   struct sockaddr *addr_tcp;
   struct sockaddr *addr_udp;
+  struct sockaddr *addr_icmp;
 	size_t addrlen_tcp;
 	size_t addrlen_udp;
+	size_t addrlen_icmp;
   t_port_result results[65536];
 };
 
@@ -86,6 +91,12 @@ struct s_udp_packet
 {
   struct iphdr ip_header;
 	struct udphdr udp_header;
+};
+
+struct s_icmp_packet
+{
+  struct iphdr ip_header;
+	struct icmphdr icmp_header;
 };
 
 struct s_thread_arg
@@ -124,16 +135,16 @@ void build_hosts(t_env *env);
 void push_host(t_env *env, t_host *host);
 uint16_t ip_checksum(void *addr, size_t len);
 void forge_iphdr(struct iphdr *header, int protocol, int pton_addr, size_t packlen);
-void forge_tcphdr_syn(t_tcp_packet *packet, struct tcphdr *header, int16_t port);
-void forge_tcphdr_null(t_tcp_packet *packet, struct tcphdr *header, int16_t port);
-void forge_tcphdr_ack(t_tcp_packet *packet, struct tcphdr *header, int16_t port);
-void forge_tcphdr_fin(t_tcp_packet *packet, struct tcphdr *header, int16_t port);
-void forge_tcphdr_xmas(t_tcp_packet *packet, struct tcphdr *header, int16_t port);
-void forge_udphdr(struct udphdr *header, int16_t port);
+void forge_tcphdr_syn(t_tcp_packet *packet, int16_t port);
+void forge_tcphdr_null(t_tcp_packet *packet, int16_t port);
+void forge_tcphdr_ack(t_tcp_packet *packet, int16_t port);
+void forge_tcphdr_fin(t_tcp_packet *packet, int16_t port);
+void forge_tcphdr_xmas(t_tcp_packet *packet, int16_t port);
+void forge_udphdr(t_udp_packet *packet, int16_t port);
 void *thread_run(void *data);
 void scan_port(t_thread_arg *thread_arg, int port);
 int16_t tcp_checksum(t_tcp_packet *packet);
-void scan_port_tcp(t_thread_arg *thread_arg, struct iphdr *ip_header, void (*forge_tcphdr)(t_tcp_packet *packet, struct tcphdr *header, int16_t port), int port, char *type);
+void scan_port_tcp(t_thread_arg *thread_arg, struct iphdr *ip_header, void (*forge_tcphdr)(t_tcp_packet *packet, int16_t port), int port, char *type);
 int scan_port_tcp_finished(t_tcp_packet *packet, char *type);
 void scan_port_tcp_set_result(t_port_result *result, char *type, t_tcp_packet *packet, int received);
 size_t epoch_micro(void);
@@ -144,5 +155,10 @@ char *get_scan_conclusion(t_env *env, t_port_result *result);
 int port_status_opened(t_env *env, t_port_result *result);
 char *get_service_name(int port);
 void debug_tcp_packet(t_tcp_packet *packet);
+void debug_udp_packet(t_udp_packet *packet);
+void debug_icmp_packet(t_icmp_packet *packet);
+int16_t udp_checksum(t_udp_packet *packet);
+int scan_port_udp_finished(t_icmp_packet *packet);
+void scan_port_udp(t_thread_arg *thread_arg, struct iphdr *ip_header, int port);
 
 #endif
