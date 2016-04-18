@@ -49,6 +49,13 @@ SRCS_NAME = main.c \
 			scan_port_tcp_finished.c \
 			scan_port_tcp_set_result.c \
 			epoch_micro.c \
+			print_result.c \
+			get_scan_result_str.c \
+			get_scan_conclusion.c \
+			port_status_opened.c \
+			get_scan_type_number.c \
+			get_service_name.c \
+			debug.c \
 
 SRCS = $(addprefix $(SRCS_PATH), $(SRCS_NAME))
 

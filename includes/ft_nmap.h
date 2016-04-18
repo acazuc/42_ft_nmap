@@ -60,6 +60,7 @@ struct s_port_result
   t_port_status status_ack;
   t_port_status status_fin;
   t_port_status status_xmas;
+  t_port_status status_udp;
 };
 
 struct s_host
@@ -136,5 +137,12 @@ void scan_port_tcp(t_thread_arg *thread_arg, struct iphdr *ip_header, void (*for
 int scan_port_tcp_finished(t_tcp_packet *packet, char *type);
 void scan_port_tcp_set_result(t_port_result *result, char *type, t_tcp_packet *packet, int received);
 size_t epoch_micro(void);
+void print_result(t_env *env, t_host *host);
+int get_scan_type_number(t_env *env);
+char *get_scan_result_str(char *type, t_port_status result);
+char *get_scan_conclusion(t_env *env, t_port_result *result);
+int port_status_opened(t_env *env, t_port_result *result);
+char *get_service_name(int port);
+void debug_tcp_packet(t_tcp_packet *packet);
 
 #endif

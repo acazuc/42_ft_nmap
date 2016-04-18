@@ -3,7 +3,7 @@
 void scan_port_tcp(t_thread_arg *thread_arg, struct iphdr *ip_header, void (*forge_tcphdr)(t_tcp_packet *packet, struct tcphdr *header, int16_t port), int port, char *type)
 {
   t_tcp_packet packet;
-  long started;
+  size_t started;
   int received;
 
   packet.ip_header = *ip_header;
@@ -26,6 +26,7 @@ void scan_port_tcp(t_thread_arg *thread_arg, struct iphdr *ip_header, void (*for
       ft_putendl_fd("ft_nmap: failed to receive packet", 2);
       exit(EXIT_FAILURE);
     }
+    debug_tcp_packet(&packet);
     if (epoch_micro() - started > 1000000)
       break;
   } while (ntohs(packet.tcp_header.source) != port && !scan_port_tcp_finished(&packet, type));

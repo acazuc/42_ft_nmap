@@ -19,7 +19,7 @@ static void run_threads(t_env *env, t_host *host)
       ft_putendl_fd("ft_nmap: can't create thread", 2);
       exit(EXIT_FAILURE);
     }
-      pthread_join(threads[i], NULL);
+    pthread_join(threads[i], NULL);
     i++;
   }
   i = 0;
@@ -32,6 +32,9 @@ static void run_threads(t_env *env, t_host *host)
 
 void scan_host(t_env *env, t_host *host)
 {
+  size_t start;
+  size_t duration;
+
   ft_putchar('\n');
   ft_putstr("Scanning ");
   ft_putstr(host->ip);
@@ -42,5 +45,9 @@ void scan_host(t_env *env, t_host *host)
     ft_putchar(')');
   }
   ft_putchar('\n');
+  start = epoch_micro();
   run_threads(env, host);
+  duration = epoch_micro() - start;
+  printf("Scan took %f seconds\n", duration / 1000000.0);
+  print_result(env, host);
 }
