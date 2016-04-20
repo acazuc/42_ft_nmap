@@ -63,7 +63,7 @@ void print_result(t_env *env, t_host *host)
 {
   int i;
 
-  printf("Opened ports:\n");
+  printf("Open ports:\n");
   printf("%-10s %-30s %-20s %-10s\n", "Port", "Service Name (if applicable)", "Results", "Conclusion");
   printf("%s-%s-%s-%s\n", "----------", "------------------------------", "--------------------", "----------");
   i = 0;
