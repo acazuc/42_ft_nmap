@@ -12,7 +12,7 @@ void scan_port_tcp(t_thread_arg *thread_arg, struct iphdr *ip_header, void (*for
   forge_tcphdr(&packet, port);
   sequence = packet.tcp_header.seq;
   packet_flush_tcp(thread_arg->host, port);
-  if (sendto(thread_arg->host->socket_tcp, &packet, sizeof(packet), 0, thread_arg->host->addr_tcp, thread_arg->host->addrlen_tcp) == -1)
+  if (sendto(thread_arg->host->socket_tcp, &packet, sizeof(packet), 0, thread_arg->host->addr, thread_arg->host->addrlen) == -1)
   {
     ft_putendl_fd("ft_nmap: failed to send packet", 2);
     exit(EXIT_FAILURE);

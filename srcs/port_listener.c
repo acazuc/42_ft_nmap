@@ -2,7 +2,7 @@
 
 static int listen_tcp(t_host *host, t_tcp_packet *packet)
 {
-  if (recvfrom(host->socket_tcp, packet, sizeof(*packet), 0, host->addr_tcp, (socklen_t*)(&host->addrlen_tcp)) == -1)
+  if (recvfrom(host->socket_tcp, packet, sizeof(*packet), 0, host->addr, (socklen_t*)(&host->addrlen)) == -1)
   {
     if (errno == EAGAIN || errno == EWOULDBLOCK)
       return (0);
@@ -14,7 +14,7 @@ static int listen_tcp(t_host *host, t_tcp_packet *packet)
 
 static int listen_icmp(t_host *host, t_icmp_packet *packet)
 {
-  if (recvfrom(host->socket_icmp, packet, sizeof(*packet), 0, host->addr_icmp, (socklen_t*)(&host->addrlen_icmp)) == -1)
+  if (recvfrom(host->socket_icmp, packet, sizeof(*packet), 0, host->addr, (socklen_t*)(&host->addrlen)) == -1)
   {
     if (errno == EAGAIN || errno == EWOULDBLOCK)
       return (0);

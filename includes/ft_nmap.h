@@ -74,12 +74,8 @@ struct s_host
   int socket_tcp;
   int socket_udp;
   int socket_icmp;
-  struct sockaddr *addr_tcp;
-  struct sockaddr *addr_udp;
-  struct sockaddr *addr_icmp;
-	size_t addrlen_tcp;
-	size_t addrlen_udp;
-	size_t addrlen_icmp;
+  struct sockaddr *addr;
+	size_t addrlen;
   t_port_result results[65536];
   char scanning[65536];
   t_tcp_packet_list *packets_tcp;

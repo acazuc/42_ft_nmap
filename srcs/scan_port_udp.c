@@ -9,7 +9,7 @@ void scan_port_udp(t_thread_arg *thread_arg, struct iphdr *ip_header, int port)
   packet.ip_header = *ip_header;
   forge_udphdr(&packet, port);
   packet_flush_icmp(thread_arg->host, port);
-  if (sendto(thread_arg->host->socket_udp, &packet, sizeof(packet), 0, thread_arg->host->addr_udp, thread_arg->host->addrlen_udp) == -1)
+  if (sendto(thread_arg->host->socket_udp, &packet, sizeof(packet), 0, thread_arg->host->addr, thread_arg->host->addrlen) == -1)
   {
     ft_putendl_fd("ft_nmap: failed to send packet", 2);
     exit(EXIT_FAILURE);

@@ -1,33 +1,5 @@
 #include "ft_nmap.h"
 
-static int resolve_destination(t_host *host, int protocol, struct sockaddr **addr, size_t *addrlen)
-{
-	struct addrinfo *res;
-	struct addrinfo hints;
-	char tmp[16];
-
-	ft_bzero(&hints, sizeof(hints));
-	hints.ai_family = AF_INET;
-	hints.ai_socktype = SOCK_RAW;
-	hints.ai_protocol = protocol;
-	if (getaddrinfo(host->host, NULL, &hints, &res))
-		return (0);
-	if (!res)
-		return (0);
-	ft_bzero(tmp, 16);
-	if (!inet_ntop(AF_INET, &((struct sockaddr_in*)res->ai_addr)->sin_addr, tmp, 16))
-		return (0);
-	host->ip = ft_strdup(tmp);
-	*addrlen = res->ai_addrlen;
-	if (!(*addr = malloc(res->ai_addrlen)))
-	{
-		ft_putstr_fd("ft_nmap: can't malloc addr\n", 2);
-		exit(EXIT_FAILURE);
-	}
-	ft_memcpy(*addr, res->ai_addr, res->ai_addrlen);
-	return (1);
-}
-
 static int build_socket(int *sock, int protocol)
 {
 	struct timeval tv;
@@ -47,13 +19,6 @@ static int build_socket(int *sock, int protocol)
 
 static int build_tcp(t_host *host)
 {
-	if (!resolve_destination(host, IPPROTO_TCP, &host->addr_tcp, &host->addrlen_tcp))
-	{
-		ft_putstr_fd("ft_nmap: can't resolve '", 2);
-		ft_putstr_fd(host->host, 2);
-		ft_putendl_fd("' host", 2);
-		return (0);
-	}
 	if (!build_socket(&host->socket_tcp, IPPROTO_TCP))
 	{
 		ft_putstr_fd("ft_nmap: can't connect to '", 2);
@@ -66,13 +31,6 @@ static int build_tcp(t_host *host)
 
 static int build_udp(t_host *host)
 {
-	if (!resolve_destination(host, IPPROTO_UDP, &host->addr_udp, &host->addrlen_udp))
-	{
-		ft_putstr_fd("ft_nmap: can't resolve '", 2);
-		ft_putstr_fd(host->host, 2);
-		ft_putendl_fd("' host", 2);
-		return (0);
-	}
 	if (!build_socket(&host->socket_udp, IPPROTO_UDP))
 	{
 		ft_putstr_fd("ft_nmap: can't connect to '", 2);
@@ -85,13 +43,6 @@ static int build_udp(t_host *host)
 
 static int build_icmp(t_host *host)
 {
-	if (!resolve_destination(host, IPPROTO_ICMP, &host->addr_icmp, &host->addrlen_icmp))
-	{
-		ft_putstr_fd("ft_nmap: can't resolve '", 2);
-		ft_putstr_fd(host->host, 2);
-		ft_putendl_fd("' host", 2);
-		return (0);
-	}
 	if (!build_socket(&host->socket_icmp, IPPROTO_ICMP))
 	{
 		ft_putstr_fd("ft_nmap: can't connect to '", 2);
@@ -100,6 +51,56 @@ static int build_icmp(t_host *host)
 		return (0);
 	}
 	return (1);
+}
+
+static void build_addr(t_host *host)
+{
+	in_addr_t tmp;
+
+	host->addrlen = sizeof(*host->addr);
+	if (!(host->addr = malloc(host->addrlen)))
+	{
+		ft_putendl_fd("ft_nmap: can't malloc new addr", 2);
+		exit(EXIT_FAILURE);
+	}
+	ft_bzero(host->addr, host->addrlen);
+	host->addr->sa_family = AF_INET;
+	ft_putendl(host->ip);
+	if ((tmp = inet_addr(host->ip)) == INADDR_NONE)
+	{
+		ft_putendl_fd("ft_nmap: can't get binary ip", 2);
+		exit(EXIT_FAILURE);
+	}
+	ft_memcpy(host->addr->sa_data + 2, &tmp, sizeof(tmp));
+}
+
+static void resolve_ip(t_host *host)
+{
+	struct hostent *hostent;
+	struct in_addr *tmp;
+
+	if (!(hostent = gethostbyname(host->host)))
+	{
+		ft_putendl_fd("ft_nmap: can't resolve ip", 2);
+		exit(EXIT_FAILURE);
+	}
+	if (hostent->h_addrtype != AF_INET)
+	{
+		ft_putendl_fd("ft_nmap: ip isn't ipv4", 2);
+		exit(EXIT_FAILURE);
+	}
+	if (hostent->h_length < 1)
+	{
+		ft_putendl_fd("ft_nmap: can't resolve ip", 2);
+		exit(EXIT_FAILURE);
+	}
+	tmp = (struct in_addr*)hostent->h_addr_list[0];
+	if (!(host->ip = inet_ntoa(*tmp)))
+	{
+		ft_putendl_fd("ft_nmap: can't get ip string", 2);
+		exit(EXIT_FAILURE);
+	}
+	host->ip = ft_strdup(host->ip);
 }
 
 void build_hosts(t_env *env)
@@ -117,6 +118,7 @@ void build_hosts(t_env *env)
 		}
 		ft_bzero(host, sizeof(*host));
 		host->host = env->ips[i];
+		resolve_ip(host);
 		if (env->type_syn || env->type_null || env->type_ack || env->type_fin || env->type_xmas)
 			if (!build_tcp(host))
 			{
@@ -139,6 +141,7 @@ void build_hosts(t_env *env)
 				continue;
 			}
 		}
+		build_addr(host);
 		if (pthread_mutex_init(&host->mutex_tcp, NULL) || pthread_mutex_init(&host->mutex_icmp, NULL))
 		{
 			ft_putendl_fd("ft_nmap: can't init pthread mutex", 2);
