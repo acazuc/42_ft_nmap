@@ -14,7 +14,7 @@ static void forge_tcphdr_common(struct tcphdr *header, int16_t port)
   header->psh = 0;
   header->ack = 0;
   header->urg = 0;
-  header->window = htons(6000);
+  header->window = htons(1024);
   header->check = 0;
   header->urg_ptr = 0;
 }

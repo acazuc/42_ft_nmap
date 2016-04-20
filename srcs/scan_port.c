@@ -10,6 +10,7 @@ void scan_port(t_thread_arg *thread_arg, int port)
     ft_putendl_fd("ft_nmap: can't inet_pton ip", 2);
     exit(EXIT_FAILURE);
   }
+  thread_arg->host->scanning[port] = 1;
   if (thread_arg->env->type_syn || thread_arg->env->type_null || thread_arg->env->type_ack
   || thread_arg->env->type_fin || thread_arg->env->type_xmas)
   {
@@ -20,14 +21,15 @@ void scan_port(t_thread_arg *thread_arg, int port)
       scan_port_tcp(thread_arg, &ip_header, forge_tcphdr_fin, port, "FIN");
     if (thread_arg->env->type_null)
       scan_port_tcp(thread_arg, &ip_header, forge_tcphdr_null, port, "NULL");
-    if (thread_arg->env->type_ack)
-      scan_port_tcp(thread_arg, &ip_header, forge_tcphdr_ack, port, "ACK");
     if (thread_arg->env->type_xmas)
       scan_port_tcp(thread_arg, &ip_header, forge_tcphdr_xmas, port, "XMAS");
+    if (thread_arg->env->type_ack)
+      scan_port_tcp(thread_arg, &ip_header, forge_tcphdr_ack, port, "ACK");
   }
   if (thread_arg->env->type_udp)
   {
     forge_iphdr(&ip_header, IPPROTO_UDP, pton_addr, sizeof(t_udp_packet));
     scan_port_udp(thread_arg, &ip_header, port);
   }
+  thread_arg->host->scanning[port] = 0;
 }

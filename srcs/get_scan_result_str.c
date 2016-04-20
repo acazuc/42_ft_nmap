@@ -7,7 +7,7 @@ char *get_scan_result_str(char *type, t_port_status result)
 
   status = "";
   if (result == OPEN)
-    status = "Opened";
+    status = "Open";
   else if (result == FILTERED)
     status = "Filtered";
   else if (result == CLOSED)

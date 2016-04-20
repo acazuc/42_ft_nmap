@@ -58,7 +58,10 @@ SRCS_NAME = main.c \
 			debug.c \
 			udp_checksum.c \
 			scan_port_udp.c \
-			scan_port_udp_finished.c \
+			packet_flush.c \
+			packet_get.c \
+			port_listener.c \
+			packet_push.c \
 
 SRCS = $(addprefix $(SRCS_PATH), $(SRCS_NAME))
 

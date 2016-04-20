@@ -30,7 +30,6 @@ void *thread_run(void *data)
   int i;
 
   thread_arg = (t_thread_arg*)data;
-  ft_putstr("Thread running..\n");
   ft_bzero(ports, sizeof(ports));
   fill_ports(thread_arg, &(ports[0]));
   i = 0;

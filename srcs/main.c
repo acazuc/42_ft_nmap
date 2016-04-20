@@ -5,6 +5,11 @@ int main(int ac, char **av)
 {
   t_env env;
 
+  if (getuid())
+  {
+    ft_putendl_fd("ft_nmap: You must have sudo rights to run this command", 2);
+    exit(EXIT_FAILURE);
+  }
   env_init(&env);
   parse_params(&env, ac, av);
   env_default(&env);

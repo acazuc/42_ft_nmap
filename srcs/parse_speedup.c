@@ -12,7 +12,7 @@ void parse_speedup(t_env *env, char *speedup)
   }
   while (speedup[0] == '0')
     speedup++;
-  if (ft_strlen(speedup) > 3)
+  if (ft_strlen(speedup) > 3 || !speedup[0])
   {
     ft_putendl_fd("ft_nmap: invalid speedup value", 2);
     print_help();

@@ -39,7 +39,7 @@ static int build_socket(int *sock, int protocol)
 	if (setsockopt(*sock, IPPROTO_IP, IP_HDRINCL, &val, sizeof(val)) == -1)
 		return (0);
 	tv.tv_sec = 0;
-  tv.tv_usec = 100000;
+  tv.tv_usec = 1000;
   if (setsockopt(*sock, SOL_SOCKET, SO_RCVTIMEO, &tv, sizeof(tv)) < 0)
       return (0);
 	return (1);
@@ -115,6 +115,7 @@ void build_hosts(t_env *env)
 			ft_putendl_fd("ft_nmap: can't malloc host struct", 2);
 			exit(EXIT_FAILURE);
 		}
+		ft_bzero(host, sizeof(*host));
 		host->host = env->ips[i];
 		if (env->type_syn || env->type_null || env->type_ack || env->type_fin || env->type_xmas)
 			if (!build_tcp(host))
@@ -137,6 +138,11 @@ void build_hosts(t_env *env)
 				i++;
 				continue;
 			}
+		}
+		if (pthread_mutex_init(&host->mutex_tcp, NULL) || pthread_mutex_init(&host->mutex_icmp, NULL))
+		{
+			ft_putendl_fd("ft_nmap: can't init pthread mutex", 2);
+			exit(EXIT_FAILURE);
 		}
 		push_host(env, host);
 		i++;

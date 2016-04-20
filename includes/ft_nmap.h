@@ -28,6 +28,8 @@ typedef struct s_icmp_packet t_icmp_packet;
 typedef struct s_thread_arg t_thread_arg;
 typedef enum e_port_status t_port_status;
 typedef struct s_port_result t_port_result;
+typedef struct s_tcp_packet_list t_tcp_packet_list;
+typedef struct s_icmp_packet_list t_icmp_packet_list;
 
 struct s_env
 {
@@ -79,6 +81,18 @@ struct s_host
 	size_t addrlen_udp;
 	size_t addrlen_icmp;
   t_port_result results[65536];
+  char scanning[65536];
+  t_tcp_packet_list *packets_tcp;
+  t_icmp_packet_list *packets_icmp;
+  pthread_mutex_t mutex_tcp;
+  pthread_mutex_t mutex_icmp;
+  char ended;
+};
+
+struct s_tcp_packet_list
+{
+  t_tcp_packet *packet;
+  t_tcp_packet_list *next;
 };
 
 struct s_tcp_packet
@@ -93,10 +107,17 @@ struct s_udp_packet
 	struct udphdr udp_header;
 };
 
+struct s_icmp_packet_list
+{
+  t_icmp_packet *packet;
+  t_icmp_packet_list *next;
+};
+
 struct s_icmp_packet
 {
   struct iphdr ip_header;
 	struct icmphdr icmp_header;
+  char data[sizeof(struct iphdr) + 64];
 };
 
 struct s_thread_arg
@@ -158,7 +179,13 @@ void debug_tcp_packet(t_tcp_packet *packet);
 void debug_udp_packet(t_udp_packet *packet);
 void debug_icmp_packet(t_icmp_packet *packet);
 int16_t udp_checksum(t_udp_packet *packet);
-int scan_port_udp_finished(t_icmp_packet *packet);
 void scan_port_udp(t_thread_arg *thread_arg, struct iphdr *ip_header, int port);
+void packet_flush_tcp(t_host *host, int port);
+void packet_flush_icmp(t_host *host, int port);
+t_tcp_packet *packet_get_tcp(t_host *host, int port, uint32_t sequence, char *type);
+void *port_listener(void *data);
+void packet_push_tcp(t_host *host, t_tcp_packet *packet);
+void packet_push_icmp(t_host *host, t_icmp_packet *packet);
+int packet_get_icmp(t_host *host, int port);
 
 #endif
