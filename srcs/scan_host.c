@@ -59,5 +59,6 @@ void scan_host(t_env *env, t_host *host)
   run_threads(env, host);
   duration = epoch_micro() - start;
   printf("Scan took %f seconds\n", duration / 1000000.0);
+  fflush(stdout);
   print_result(env, host);
 }

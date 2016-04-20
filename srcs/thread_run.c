@@ -36,9 +36,7 @@ void *thread_run(void *data)
   while (i < 65536)
   {
     if (ports[i])
-    {
       scan_port(thread_arg, i);
-    }
     i++;
   }
   return (NULL);

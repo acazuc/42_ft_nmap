@@ -11,7 +11,7 @@ static int build_socket(int *sock, int protocol)
 	if (setsockopt(*sock, IPPROTO_IP, IP_HDRINCL, &val, sizeof(val)) == -1)
 		return (0);
 	tv.tv_sec = 0;
-  tv.tv_usec = 1000;
+  tv.tv_usec = 100;
   if (setsockopt(*sock, SOL_SOCKET, SO_RCVTIMEO, &tv, sizeof(tv)) < 0)
       return (0);
 	return (1);

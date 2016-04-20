@@ -37,8 +37,6 @@ void packet_push_icmp(t_host *host, t_icmp_packet *packet)
         ft_putendl_fd("Can't malloc new packet list", 2);
         exit(EXIT_FAILURE);
       }
-      printf("Pushing ICMP packet width type: %d, code: %d\n", packet->icmp_header.type, packet->icmp_header.code);
-      fflush(stdout);
       new->packet = packet;
       pthread_mutex_lock(&host->mutex_icmp);
       new->next = host->packets_icmp;

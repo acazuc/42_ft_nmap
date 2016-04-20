@@ -10,7 +10,9 @@ void scan_port(t_thread_arg *thread_arg, int port)
     ft_putendl_fd("ft_nmap: can't inet_pton ip", 2);
     exit(EXIT_FAILURE);
   }
+  pthread_mutex_lock(&thread_arg->host->mutex_tcp);
   thread_arg->host->scanning[port] = 1;
+  pthread_mutex_unlock(&thread_arg->host->mutex_tcp);
   if (thread_arg->env->type_syn || thread_arg->env->type_null || thread_arg->env->type_ack
   || thread_arg->env->type_fin || thread_arg->env->type_xmas)
   {
@@ -31,5 +33,7 @@ void scan_port(t_thread_arg *thread_arg, int port)
     forge_iphdr(&ip_header, IPPROTO_UDP, pton_addr, sizeof(t_udp_packet));
     scan_port_udp(thread_arg, &ip_header, port);
   }
+  pthread_mutex_lock(&thread_arg->host->mutex_tcp);
   thread_arg->host->scanning[port] = 0;
+  pthread_mutex_unlock(&thread_arg->host->mutex_tcp);
 }
