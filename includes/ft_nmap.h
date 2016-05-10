@@ -9,16 +9,17 @@
 # include <linux/udp.h>
 # include <arpa/inet.h>
 # include <sys/types.h>
+# include <sys/time.h>
 # include <linux/ip.h>
 # include <pthread.h>
 # include <stdlib.h>
 # include <unistd.h>
 # include <stdint.h>
+# include <limits.h>
 # include <errno.h>
 # include <netdb.h>
 # include <fcntl.h>
 # include <stdio.h>
-# include <pcap.h>
 
 typedef struct s_env t_env;
 typedef struct s_host t_host;
@@ -35,7 +36,7 @@ struct s_env
 {
   t_host **hosts;
   char **ips;
-  char ports[65536];
+  char ports[USHRT_MAX + 1];
   int threads_nb;
   char type_syn;
   char type_null;
@@ -76,8 +77,8 @@ struct s_host
   int socket_icmp;
   struct sockaddr *addr;
 	size_t addrlen;
-  t_port_result results[65536];
-  char scanning[65536];
+  t_port_result results[USHRT_MAX + 1];
+  char scanning[USHRT_MAX + 1];
   t_tcp_packet_list *packets_tcp;
   t_icmp_packet_list *packets_icmp;
   pthread_mutex_t mutex_tcp;
@@ -152,16 +153,16 @@ void build_hosts(t_env *env);
 void push_host(t_env *env, t_host *host);
 uint16_t ip_checksum(void *addr, size_t len);
 void forge_iphdr(struct iphdr *header, int protocol, int pton_addr, size_t packlen);
-void forge_tcphdr_syn(t_tcp_packet *packet, int16_t port);
-void forge_tcphdr_null(t_tcp_packet *packet, int16_t port);
-void forge_tcphdr_ack(t_tcp_packet *packet, int16_t port);
-void forge_tcphdr_fin(t_tcp_packet *packet, int16_t port);
-void forge_tcphdr_xmas(t_tcp_packet *packet, int16_t port);
+void forge_tcphdr_syn(t_tcp_packet *packet, int16_t port, int pton_addr);
+void forge_tcphdr_null(t_tcp_packet *packet, int16_t port, int pton_addr);
+void forge_tcphdr_ack(t_tcp_packet *packet, int16_t port, int pton_addr);
+void forge_tcphdr_fin(t_tcp_packet *packet, int16_t port, int pton_addr);
+void forge_tcphdr_xmas(t_tcp_packet *packet, int16_t port, int pton_addr);
 void forge_udphdr(t_udp_packet *packet, int16_t port);
 void *thread_run(void *data);
 void scan_port(t_thread_arg *thread_arg, int port);
-int16_t tcp_checksum(t_tcp_packet *packet);
-void scan_port_tcp(t_thread_arg *thread_arg, struct iphdr *ip_header, void (*forge_tcphdr)(t_tcp_packet *packet, int16_t port), int port, char *type);
+int16_t tcp_checksum(t_tcp_packet *packet, int pton_addr);
+void scan_port_tcp(t_thread_arg *thread_arg, struct iphdr *ip_header, void (*forge_tcphdr)(t_tcp_packet *packet, int16_t port, int pton_addr), int port, char *type);
 int scan_port_tcp_finished(t_tcp_packet *packet, char *type);
 void scan_port_tcp_set_result(t_port_result *result, char *type, t_tcp_packet *packet, int received);
 size_t epoch_micro(void);

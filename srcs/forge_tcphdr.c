@@ -19,38 +19,38 @@ static void forge_tcphdr_common(struct tcphdr *header, int16_t port)
   header->urg_ptr = 0;
 }
 
-void forge_tcphdr_syn(t_tcp_packet *packet, int16_t port)
+void forge_tcphdr_syn(t_tcp_packet *packet, int16_t port, int pton_addr)
 {
   forge_tcphdr_common(&packet->tcp_header, port);
   packet->tcp_header.syn = 1;
-  packet->tcp_header.check = tcp_checksum(packet);
+  packet->tcp_header.check = tcp_checksum(packet, pton_addr);
 }
 
-void forge_tcphdr_null(t_tcp_packet *packet, int16_t port)
+void forge_tcphdr_null(t_tcp_packet *packet, int16_t port, int pton_addr)
 {
   forge_tcphdr_common(&packet->tcp_header, port);
-  packet->tcp_header.check = tcp_checksum(packet);
+  packet->tcp_header.check = tcp_checksum(packet, pton_addr);
 }
 
-void forge_tcphdr_ack(t_tcp_packet *packet, int16_t port)
+void forge_tcphdr_ack(t_tcp_packet *packet, int16_t port, int pton_addr)
 {
   forge_tcphdr_common(&packet->tcp_header, port);
   packet->tcp_header.ack = 1;
-  packet->tcp_header.check = tcp_checksum(packet);
+  packet->tcp_header.check = tcp_checksum(packet, pton_addr);
 }
 
-void forge_tcphdr_fin(t_tcp_packet *packet, int16_t port)
+void forge_tcphdr_fin(t_tcp_packet *packet, int16_t port, int pton_addr)
 {
   forge_tcphdr_common(&packet->tcp_header, port);
   packet->tcp_header.fin = 1;
-  packet->tcp_header.check = tcp_checksum(packet);
+  packet->tcp_header.check = tcp_checksum(packet, pton_addr);
 }
 
-void forge_tcphdr_xmas(t_tcp_packet *packet, int16_t port)
+void forge_tcphdr_xmas(t_tcp_packet *packet, int16_t port, int pton_addr)
 {
   forge_tcphdr_common(&packet->tcp_header, port);
   packet->tcp_header.fin = 1;
   packet->tcp_header.psh = 1;
   packet->tcp_header.urg = 1;
-  packet->tcp_header.check = tcp_checksum(packet);
+  packet->tcp_header.check = tcp_checksum(packet, pton_addr);
 }

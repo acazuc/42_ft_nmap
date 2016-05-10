@@ -2,9 +2,9 @@
 
 static void define_ports(t_env *env)
 {
-  int i;
+	int i;
 
-  i = 1;
+	i = 1;
   while (i <= 1024)
   {
     env->ports[i] = 1;

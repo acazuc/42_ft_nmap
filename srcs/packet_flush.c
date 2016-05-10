@@ -10,7 +10,7 @@ void packet_flush_tcp(t_host *host, int port)
   prv = NULL;
   while (lst)
   {
-    if (lst->packet->tcp_header.source == port)
+    if (ntohs(lst->packet->tcp_header.source) == port)
     {
       if (!prv)
         host->packets_tcp = lst->next;
@@ -18,9 +18,15 @@ void packet_flush_tcp(t_host *host, int port)
         prv->next = lst->next;
       free(lst->packet);
       free(lst);
+      if (prv)
+        lst = prv->next;
+      else
+        lst = host->packets_tcp;
     }
-    prv = lst;
-    lst = lst->next;
+    else {
+      prv = lst;
+      lst = lst->next;
+    }
   }
   pthread_mutex_unlock(&host->mutex_tcp);
 }
