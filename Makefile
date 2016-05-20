@@ -6,7 +6,7 @@
 #    By: acazuc <acazuc@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2015/11/25 06:50:12 by acazuc            #+#    #+#              #
-#    Updated: 2016/04/16 14:46:36 by acazuc           ###   ########.fr        #
+#    Updated: 2016/05/20 09:06:57 by acazuc           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -71,7 +71,7 @@ OBJS_NAME = $(SRCS_NAME:.c=.o)
 
 OBJS = $(addprefix $(OBJS_PATH), $(OBJS_NAME))
 
-LIBRARY = -L libft/ -lft -lpthread -lpcap
+LIBRARY = -L libft/ -lft -lpthread
 
 all: odir $(NAME)
 
