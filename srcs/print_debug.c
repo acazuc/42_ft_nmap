@@ -33,7 +33,7 @@ static void print_scans(t_env *env)
 void print_debug(t_env *env)
 {
     ft_putendl("Scan Configurations");
-    ft_putstr("Target ip address: ");
+    ft_putstr("Target ip addresses: ");
     print_hosts(env);
     ft_putchar('\n');
     ft_putstr("Number of ports to scan: ");
