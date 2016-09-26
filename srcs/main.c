@@ -15,6 +15,7 @@ int main(int ac, char **av)
 	if (!env.ips)
 	{
 		ft_putendl_fd("ft_nmap: You must choose an ip to scan", 2);
+		print_help();
 		exit(EXIT_FAILURE);
 	}
 	env_default(&env);

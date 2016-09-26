@@ -11,7 +11,7 @@ void parse_file(t_env *env, char *file)
 	}
 	if (!(content = file_get_contents(file)))
 	{
-  	  	ft_putstr_fd("ft_nmap: can't get '", 2);
+	  	ft_putstr_fd("ft_nmap: can't get '", 2);
 		ft_putstr_fd(file, 2);
 		ft_putendl_fd("' file", 2);
 		exit(EXIT_FAILURE);
