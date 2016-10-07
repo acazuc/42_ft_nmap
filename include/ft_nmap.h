@@ -1,7 +1,7 @@
 #ifndef FT_NMAP_H
 # define FT_NMAP_H
 
-# include "../libft/includes/libft.h"
+# include "../libft/include/libft.h"
 # include <sys/socket.h>
 # include <netinet/in.h>
 # include <linux/icmp.h>
