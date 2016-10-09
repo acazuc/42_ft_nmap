@@ -20,6 +20,7 @@
 # include <netdb.h>
 # include <fcntl.h>
 # include <stdio.h>
+# include <poll.h>
 
 typedef struct s_env t_env;
 typedef struct s_host t_host;
@@ -34,104 +35,105 @@ typedef struct s_icmp_packet_list t_icmp_packet_list;
 
 struct s_env
 {
-  t_host **hosts;
-  char **ips;
-  char ports[USHRT_MAX + 1];
-  int threads_nb;
-  char type_syn;
-  char type_null;
-  char type_ack;
-  char type_fin;
-  char type_xmas;
-  char type_udp;
-  char defined_ports;
-  char defined_speedup;
-  char defined_scans;
+	int dummy_socket;
+	t_host **hosts;
+	char **ips;
+	char ports[USHRT_MAX + 1];
+	int threads_nb;
+	char type_syn;
+	char type_null;
+	char type_ack;
+	char type_fin;
+	char type_xmas;
+	char type_udp;
+	char defined_ports;
+	char defined_speedup;
+	char defined_scans;
 };
 
 enum e_port_status
 {
-  OPEN,
-  FILTERED,
-  CLOSED,
-  UNFILTERED,
-  OPEN_FILTERED
+	OPEN,
+	FILTERED,
+	CLOSED,
+	UNFILTERED,
+	OPEN_FILTERED
 };
 
 struct s_port_result
 {
-  t_port_status status_syn;
-  t_port_status status_null;
-  t_port_status status_ack;
-  t_port_status status_fin;
-  t_port_status status_xmas;
-  t_port_status status_udp;
+	t_port_status status_syn;
+	t_port_status status_null;
+	t_port_status status_ack;
+	t_port_status status_fin;
+	t_port_status status_xmas;
+	t_port_status status_udp;
 };
 
 struct s_host
 {
-  char *host;
-  char *ip;
-  int socket_tcp;
-  int socket_udp;
-  int socket_icmp;
-  struct sockaddr *addr;
+	char *host;
+	char *ip;
+	int socket_tcp;
+	int socket_udp;
+	int socket_icmp;
+	struct sockaddr *addr;
 	size_t addrlen;
-  t_port_result results[USHRT_MAX + 1];
-  char scanning[USHRT_MAX + 1];
-  t_tcp_packet_list *packets_tcp;
-  t_icmp_packet_list *packets_icmp;
-  pthread_mutex_t mutex_tcp;
-  pthread_mutex_t mutex_icmp;
-  char ended;
+	t_port_result results[USHRT_MAX + 1];
+	char scanning[USHRT_MAX + 1];
+	t_tcp_packet_list *packets_tcp;
+	t_icmp_packet_list *packets_icmp;
+	pthread_mutex_t mutex_tcp;
+	pthread_mutex_t mutex_icmp;
+	char ended;
 };
 
 struct s_tcp_packet_list
 {
-  t_tcp_packet *packet;
-  t_tcp_packet_list *next;
+	t_tcp_packet *packet;
+	t_tcp_packet_list *next;
 };
 
 struct s_tcp_packet
 {
-  struct iphdr ip_header;
+	struct iphdr ip_header;
 	struct tcphdr tcp_header;
 };
 
 struct s_udp_packet
 {
-  struct iphdr ip_header;
+	struct iphdr ip_header;
 	struct udphdr udp_header;
 };
 
 struct s_icmp_packet_list
 {
-  t_icmp_packet *packet;
-  t_icmp_packet_list *next;
+	t_icmp_packet *packet;
+	t_icmp_packet_list *next;
 };
 
 struct s_icmp_packet
 {
-  struct iphdr ip_header;
+	struct iphdr ip_header;
 	struct icmphdr icmp_header;
-  char data[sizeof(struct iphdr) + 64];
+	char data[sizeof(struct iphdr) + 64];
 };
 
 struct s_thread_arg
 {
-  t_env *env;
-  t_host *host;
-  int total_threads;
-  int thread_id;
+	t_env *env;
+	t_host *host;
+	int total_threads;
+	int thread_id;
 };
 
 struct tcp_psdhdr
 {
-    uint32_t source;
-    uint32_t dest;
-    uint8_t blank;
-    uint8_t protocol;
-    uint16_t len;
+	uint32_t source;
+	uint32_t dest;
+	uint8_t blank;
+	uint8_t protocol;
+	uint16_t len;
 };
 
 void env_default(t_env *env);

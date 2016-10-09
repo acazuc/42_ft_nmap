@@ -26,7 +26,6 @@ int packet_get_icmp(t_host *host, int port)
 
 	pthread_mutex_lock(&host->mutex_icmp);
 	lst = host->packets_icmp;
-	pthread_mutex_unlock(&host->mutex_icmp);
 	while (lst)
 	{
 		if (lst->packet->icmp_header.type == 3 && lst->packet->icmp_header.code == 3)
@@ -34,9 +33,13 @@ int packet_get_icmp(t_host *host, int port)
 			ft_memcpy(&tmp_port, lst->packet->data + sizeof(struct iphdr) + 2, sizeof(tmp_port));
 			tmp_port = ntohs(tmp_port);
 			if (tmp_port == (uint16_t)port)
+			{
+				pthread_mutex_unlock(&host->mutex_icmp);
 				return (1);
+			}
 		}
 		lst = lst->next;
 	}
+	pthread_mutex_unlock(&host->mutex_icmp);
 	return (0);
 }

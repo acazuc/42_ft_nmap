@@ -22,6 +22,11 @@ int main(int ac, char **av)
 	env_check_port_number(&env);
 	print_debug(&env);
 	build_hosts(&env);
+	if ((env.dummy_socket = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP)) == -1)
+	{
+		ft_putendl_fd("ft_nmap: dan't create dummy socket", 2);
+		exit(EXIT_FAILURE);
+	}
 	int i = 0;
 	while (env.hosts[i])
 	{
