@@ -35,7 +35,6 @@ typedef struct s_icmp_packet_list t_icmp_packet_list;
 
 struct s_env
 {
-	int dummy_socket;
 	t_host **hosts;
 	char **ips;
 	char ports[USHRT_MAX + 1];

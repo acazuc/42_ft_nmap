@@ -9,7 +9,6 @@ static int listen_tcp(t_host *host, t_tcp_packet *packet)
 		ft_putendl_fd("ft_nmap: failed to receive packet", 2);
 		exit(EXIT_FAILURE);
 	}
-	ft_putendl("ok");
 	return (1);
 }
 

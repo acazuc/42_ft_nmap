@@ -16,7 +16,7 @@ void scan_port_tcp(t_thread_arg *thread_arg, struct iphdr *ip_header, void (*for
 	packet_flush_tcp(thread_arg->host, port);
 	received = 0;
 	retry = 0;
-	while (retry < 2 && !received)
+	while (retry < 3 && !received)
 	{
 		if (sendto(thread_arg->host->socket_tcp, &packet, sizeof(packet), 0, thread_arg->host->addr, thread_arg->host->addrlen) == -1)
 		{
@@ -37,7 +37,6 @@ void scan_port_tcp(t_thread_arg *thread_arg, struct iphdr *ip_header, void (*for
 				ft_putendl_fd("ft_nmap: poll failed", 2);
 				exit(EXIT_FAILURE);
 			}
-			ft_putchar('a');
 			if ((recv_packet = packet_get_tcp(thread_arg->host, port, sequence, type)))
 			{
 				received = 1;
