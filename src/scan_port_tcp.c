@@ -10,7 +10,7 @@ void scan_port_tcp(t_thread_arg *thread_arg, struct iphdr *ip_header, void (*for
 	struct pollfd fds;
 
 	packet.ip_header = *ip_header;
-	forge_tcphdr(&packet, port, htonl(2130706433));
+	forge_tcphdr(&packet, port, thread_arg->env->local_ip);
 	sequence = packet.tcp_header.seq;
 	packet_flush_tcp(thread_arg->host, port);
 	received = 0;

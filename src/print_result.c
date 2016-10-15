@@ -1,6 +1,6 @@
 #include "ft_nmap.h"
 
-static void print_result_port_mult_part(char *type, t_port_status status, int i)
+static void print_result_port_mult_part(char *type, enum e_port_status status, int i)
 {
 	char *tmp;
 

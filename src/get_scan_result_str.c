@@ -1,6 +1,6 @@
 #include "ft_nmap.h"
 
-char *get_scan_result_str(char *type, t_port_status result)
+char *get_scan_result_str(char *type, enum e_port_status result)
 {
 	char *status;
 	char *rslt;
