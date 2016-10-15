@@ -20,6 +20,7 @@ int main(int ac, char **av)
 	}
 	env_default(&env);
 	env_check_port_number(&env);
+	resolve_self_ip(&env);
 	print_debug(&env);
 	build_hosts(&env);
 	int i = 0;
@@ -28,4 +29,5 @@ int main(int ac, char **av)
 		scan_host(&env, env.hosts[i]);
 		i++;
 	}
+	return (EXIT_SUCCESS);
 }

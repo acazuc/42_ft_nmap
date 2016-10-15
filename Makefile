@@ -6,7 +6,7 @@
 #    By: acazuc <acazuc@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2015/11/25 06:50:12 by acazuc            #+#    #+#              #
-#    Updated: 2016/10/07 18:41:49 by acazuc           ###   ########.fr        #
+#    Updated: 2016/10/15 16:42:37 by acazuc           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -62,6 +62,7 @@ SRCS_NAME = main.c \
 			packet_get.c \
 			port_listener.c \
 			packet_push.c \
+			resolve_self_ip.c \
 
 SRCS = $(addprefix $(SRCS_PATH), $(SRCS_NAME))
 

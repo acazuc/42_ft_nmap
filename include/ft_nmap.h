@@ -28,10 +28,10 @@ typedef struct s_tcp_packet t_tcp_packet;
 typedef struct s_udp_packet t_udp_packet;
 typedef struct s_icmp_packet t_icmp_packet;
 typedef struct s_thread_arg t_thread_arg;
-typedef enum e_port_status t_port_status;
 typedef struct s_port_result t_port_result;
 typedef struct s_tcp_packet_list t_tcp_packet_list;
 typedef struct s_icmp_packet_list t_icmp_packet_list;
+typedef struct s_ping_packet t_ping_packet;
 
 struct s_env
 {
@@ -39,6 +39,7 @@ struct s_env
 	char **ips;
 	char ports[USHRT_MAX + 1];
 	int threads_nb;
+	int local_ip;
 	char type_syn;
 	char type_null;
 	char type_ack;
@@ -61,12 +62,12 @@ enum e_port_status
 
 struct s_port_result
 {
-	t_port_status status_syn;
-	t_port_status status_null;
-	t_port_status status_ack;
-	t_port_status status_fin;
-	t_port_status status_xmas;
-	t_port_status status_udp;
+	enum e_port_status status_syn;
+	enum e_port_status status_null;
+	enum e_port_status status_ack;
+	enum e_port_status status_fin;
+	enum e_port_status status_xmas;
+	enum e_port_status status_udp;
 };
 
 struct s_host
@@ -116,6 +117,13 @@ struct s_icmp_packet
 	struct iphdr ip_header;
 	struct icmphdr icmp_header;
 	char data[sizeof(struct iphdr) + 64];
+};
+
+struct s_ping_packet
+{
+	struct iphdr ip_header;
+	struct icmphdr icmp_header;
+	char data[56];
 };
 
 struct s_thread_arg
@@ -169,7 +177,7 @@ void scan_port_tcp_set_result(t_port_result *result, char *type, t_tcp_packet *p
 size_t epoch_micro(void);
 void print_result(t_env *env, t_host *host);
 int get_scan_type_number(t_env *env);
-char *get_scan_result_str(char *type, t_port_status result);
+char *get_scan_result_str(char *type, enum e_port_status result);
 char *get_scan_conclusion(t_env *env, t_port_result *result);
 int port_status_opened(t_env *env, t_port_result *result);
 char *get_service_name(int port);
@@ -185,5 +193,6 @@ void *port_listener(void *data);
 void packet_push_tcp(t_host *host, t_tcp_packet *packet);
 void packet_push_icmp(t_host *host, t_icmp_packet *packet);
 int packet_get_icmp(t_host *host, int port);
+void resolve_self_ip(t_env *env);
 
 #endif
