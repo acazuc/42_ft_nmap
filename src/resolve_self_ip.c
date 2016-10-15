@@ -6,13 +6,13 @@
 /*   By: acazuc <acazuc@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/10/15 16:35:09 by acazuc            #+#    #+#             */
-/*   Updated: 2016/10/15 17:30:48 by acazuc           ###   ########.fr       */
+/*   Updated: 2016/10/15 18:22:12 by acazuc           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_nmap.h"
 
-#define DIST_IP (2899906862)
+#define DIST_IP (134744072)
 
 static void build_ip_header(struct iphdr *header)
 {
@@ -53,9 +53,11 @@ void	resolve_self_ip(t_env *env)
 	int val;
 	int i;
 
+	ft_bzero(&sa, sizeof(sa));
 	sa.sin_family = AF_INET;
 	sa.sin_port = 0;
 	sa.sin_addr.s_addr = htonl(DIST_IP);
+	ft_putendl(inet_ntoa(sa.sin_addr));
 	if ((sock = socket(AF_INET, SOCK_RAW, IPPROTO_ICMP)) == -1)
 	{
 		ft_putendl_fd("ft_nmap: socket failed", 2);
@@ -74,9 +76,9 @@ void	resolve_self_ip(t_env *env)
 		ft_putendl_fd("ft_nmap: can't change socket recvtime", 2);
 		exit(EXIT_FAILURE);
 	}
+	ft_bzero(&packet, sizeof(packet));
 	build_ip_header(&packet.ip_header);
 	build_icmp_header(&packet.icmp_header);
-	ft_bzero(packet.data, sizeof(packet.data));
 	i = 0;
 	while (i < 10) // max 10s (10 * 1s)
 	{
@@ -100,7 +102,11 @@ void	resolve_self_ip(t_env *env)
 				continue;
 			}
 			ft_putendl("received");
-			ft_putstr("type: ");
+			ft_putstr("ip (daddr): ");
+			ft_putstr(inet_ntoa(*((struct in_addr*)&recv_packet.ip_header.daddr)));
+			ft_putstr("ip (saddr): ");
+			ft_putstr(inet_ntoa(*((struct in_addr*)&recv_packet.ip_header.saddr)));
+			ft_putstr("\ntype: ");
 			ft_putnbr(recv_packet.icmp_header.type);
 			ft_putstr("\nid: ");
 			ft_putnbr(recv_packet.icmp_header.un.echo.id);
