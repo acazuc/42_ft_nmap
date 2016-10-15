@@ -6,11 +6,13 @@
 /*   By: acazuc <acazuc@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/10/15 16:35:09 by acazuc            #+#    #+#             */
-/*   Updated: 2016/10/15 17:13:51 by acazuc           ###   ########.fr       */
+/*   Updated: 2016/10/15 17:30:48 by acazuc           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_nmap.h"
+
+#define DIST_IP (2899906862)
 
 static void build_ip_header(struct iphdr *header)
 {
@@ -24,7 +26,7 @@ static void build_ip_header(struct iphdr *header)
 	header->ttl = 255;
 	header->protocol = IPPROTO_ICMP;
 	header->check = 0;
-	header->daddr = 134744072;
+	header->daddr = htonl(DIST_IP);
 	header->saddr = 0;
 	header->check = 0;
 }
@@ -53,8 +55,7 @@ void	resolve_self_ip(t_env *env)
 
 	sa.sin_family = AF_INET;
 	sa.sin_port = 0;
-	sa.sin_addr.s_addr = 134744072;
-	ft_bzero(sa.sin_zero, sizeof(sa.sin_zero));
+	sa.sin_addr.s_addr = htonl(DIST_IP);
 	if ((sock = socket(AF_INET, SOCK_RAW, IPPROTO_ICMP)) == -1)
 	{
 		ft_putendl_fd("ft_nmap: socket failed", 2);
@@ -79,7 +80,7 @@ void	resolve_self_ip(t_env *env)
 	i = 0;
 	while (i < 10) // max 10s (10 * 1s)
 	{
-		if (sendto(sock, &packet, sizeof(packet), 0, (struct sockaddr*)&sa, sl) == -1)
+		if (sendto(sock, &packet, sizeof(packet), MSG_CONFIRM, (struct sockaddr*)&sa, sl) == -1)
 		{
 			ft_putendl_fd("ft_nmap: can't send ping packet", 2);
 			exit(EXIT_FAILURE);
@@ -95,8 +96,17 @@ void	resolve_self_ip(t_env *env)
 					exit(EXIT_FAILURE);
 				}
 				++j;
+				ft_putendl("nope");
 				continue;
 			}
+			ft_putendl("received");
+			ft_putstr("type: ");
+			ft_putnbr(recv_packet.icmp_header.type);
+			ft_putstr("\nid: ");
+			ft_putnbr(recv_packet.icmp_header.un.echo.id);
+			ft_putstr("\nsequence: ");
+			ft_putnbr(recv_packet.icmp_header.un.echo.sequence);
+			ft_putchar('\n');
 			if (recv_packet.icmp_header.type == 0
 					&& recv_packet.icmp_header.un.echo.id == getpid()
 					&& recv_packet.icmp_header.un.echo.sequence == 1)
