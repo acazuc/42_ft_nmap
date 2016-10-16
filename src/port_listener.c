@@ -48,6 +48,12 @@ static t_icmp_packet *packet_icmp_alloc(void)
 	return (packet);
 }
 
+void sigalrm_listen(int sig)
+{
+	(void)sig;
+	ft_putendl("YEAH");
+}
+
 void *port_listener(void *data)
 {
 	t_tcp_packet *packet_tcp;
@@ -55,6 +61,7 @@ void *port_listener(void *data)
 	t_thread_arg *arg;
 	struct pollfd fds[2];
 
+	signal(SIGALRM, sigalrm_listen);
 	arg = (t_thread_arg*)data;
 	packet_tcp = packet_tcp_alloc();
 	packet_icmp = packet_icmp_alloc();

@@ -17,6 +17,7 @@
 # include <unistd.h>
 # include <stdint.h>
 # include <limits.h>
+# include <signal.h>
 # include <errno.h>
 # include <netdb.h>
 # include <fcntl.h>

@@ -36,6 +36,7 @@ static void run_threads(t_env *env, t_host *host)
 		pthread_join(threads[i], NULL);
 		i++;
 	}
+	alarm(1);
 	host->ended = 1;
 	pthread_join(listener, NULL);
 }
