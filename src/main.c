@@ -21,6 +21,7 @@ int main(int ac, char **av)
 	env_default(&env);
 	env_check_port_number(&env);
 	resolve_self_ip(&env);
+	reserve_port(&env);
 	print_debug(&env);
 	build_hosts(&env);
 	int i = 0;

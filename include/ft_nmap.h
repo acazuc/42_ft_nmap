@@ -41,6 +41,7 @@ struct s_env
 	char ports[USHRT_MAX + 1];
 	int threads_nb;
 	int local_ip;
+	unsigned short port;
 	char type_syn;
 	char type_null;
 	char type_ack;
@@ -163,16 +164,16 @@ void build_hosts(t_env *env);
 void push_host(t_env *env, t_host *host);
 uint16_t ip_checksum(void *addr, size_t len);
 void forge_iphdr(struct iphdr *header, int protocol, int pton_addr, size_t packlen);
-void forge_tcphdr_syn(t_tcp_packet *packet, int16_t port, int pton_addr);
-void forge_tcphdr_null(t_tcp_packet *packet, int16_t port, int pton_addr);
-void forge_tcphdr_ack(t_tcp_packet *packet, int16_t port, int pton_addr);
-void forge_tcphdr_fin(t_tcp_packet *packet, int16_t port, int pton_addr);
-void forge_tcphdr_xmas(t_tcp_packet *packet, int16_t port, int pton_addr);
+void forge_tcphdr_syn(t_env *env, t_tcp_packet *packet, int16_t port, int pton_addr);
+void forge_tcphdr_null(t_env *env, t_tcp_packet *packet, int16_t port, int pton_addr);
+void forge_tcphdr_ack(t_env *env, t_tcp_packet *packet, int16_t port, int pton_addr);
+void forge_tcphdr_fin(t_env *env, t_tcp_packet *packet, int16_t port, int pton_addr);
+void forge_tcphdr_xmas(t_env *env, t_tcp_packet *packet, int16_t port, int pton_addr);
 void forge_udphdr(t_udp_packet *packet, int16_t port);
 void *thread_run(void *data);
 void scan_port(t_thread_arg *thread_arg, int port);
 int16_t tcp_checksum(t_tcp_packet *packet, int pton_addr);
-void scan_port_tcp(t_thread_arg *thread_arg, struct iphdr *ip_header, void (*forge_tcphdr)(t_tcp_packet *packet, int16_t port, int pton_addr), int port, char *type);
+void scan_port_tcp(t_thread_arg *thread_arg, struct iphdr *ip_header, void (*forge_tcphdr)(t_env *env, t_tcp_packet *packet, int16_t port, int pton_addr), int port, char *type);
 int scan_port_tcp_finished(t_tcp_packet *packet, char *type);
 void scan_port_tcp_set_result(t_port_result *result, char *type, t_tcp_packet *packet, int received);
 size_t epoch_micro(void);
@@ -195,5 +196,6 @@ void packet_push_tcp(t_host *host, t_tcp_packet *packet);
 void packet_push_icmp(t_host *host, t_icmp_packet *packet);
 int packet_get_icmp(t_host *host, int port);
 void resolve_self_ip(t_env *env);
+void reserve_port(t_env *env);
 
 #endif

@@ -1,6 +1,6 @@
 #include "ft_nmap.h"
 
-void scan_port_tcp(t_thread_arg *thread_arg, struct iphdr *ip_header, void (*forge_tcphdr)(t_tcp_packet *packet, int16_t port, int pton_addr), int port, char *type)
+void scan_port_tcp(t_thread_arg *thread_arg, struct iphdr *ip_header, void (*forge_tcphdr)(t_env *env, t_tcp_packet *packet, int16_t port, int pton_addr), int port, char *type)
 {
 	t_tcp_packet *recv_packet;
 	t_tcp_packet packet;
@@ -10,7 +10,7 @@ void scan_port_tcp(t_thread_arg *thread_arg, struct iphdr *ip_header, void (*for
 	struct pollfd fds;
 
 	packet.ip_header = *ip_header;
-	forge_tcphdr(&packet, port, thread_arg->env->local_ip);
+	forge_tcphdr(thread_arg->env, &packet, port, thread_arg->env->local_ip);
 	sequence = packet.tcp_header.seq;
 	packet_flush_tcp(thread_arg->host, port);
 	received = 0;
