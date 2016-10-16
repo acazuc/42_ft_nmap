@@ -121,7 +121,7 @@ struct s_icmp_packet
 {
 	struct iphdr ip_header;
 	struct icmphdr icmp_header;
-	char data[sizeof(struct iphdr) + 64];
+	char data[sizeof(struct iphdr) + sizeof(struct udphdr)];
 };
 
 struct s_ping_packet
