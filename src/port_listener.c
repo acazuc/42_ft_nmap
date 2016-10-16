@@ -141,23 +141,26 @@ static void packet_callback(u_char *tmp, const struct pcap_pkthdr *pkthdr, const
 	t_thread_arg *arg;
 	unsigned short ethertype;
 	struct iphdr iphdr;
+	int etherlen = 14;
 
 	(void)arg;
 	arg = (t_thread_arg*)tmp;
-	if (pkthdr->len < 14 + sizeof(iphdr))
+	if (pkthdr->caplen < 14 + sizeof(iphdr))
 		return;
 	ft_memcpy(&ethertype, packet + 12, sizeof(ethertype));
-	if (ntohs(ethertype) != 0x0800)
+	if (ntohs(ethertype) == 0x8100 || !ethertype)
+		etherlen = 16;
+	else if (ntohs(ethertype) != 0x0800)
 		return;
-	memcpy(&iphdr, packet + 14, sizeof(iphdr));
+	memcpy(&iphdr, packet + etherlen, sizeof(iphdr));
 	if (iphdr.saddr != ((struct sockaddr_in*)arg->host->addr)->sin_addr.s_addr)
 		return;
 	if (iphdr.protocol == IPPROTO_TCP)
 	{
 		t_tcp_packet *tcp_packet = packet_tcp_alloc();
-		if (pkthdr->len < 14 + sizeof(*tcp_packet))
+		if (pkthdr->caplen < etherlen + sizeof(*tcp_packet))
 			return;
-		ft_memcpy(tcp_packet, packet + 14, sizeof(*tcp_packet));
+		ft_memcpy(tcp_packet, packet + etherlen, sizeof(*tcp_packet));
 		if (tcp_packet->tcp_header.dest == htons(arg->env->port))
 		{
 			packet_push_tcp(arg->host, tcp_packet);
@@ -166,40 +169,32 @@ static void packet_callback(u_char *tmp, const struct pcap_pkthdr *pkthdr, const
 	else if (iphdr.protocol == IPPROTO_ICMP)
 	{
 		t_icmp_packet *icmp_packet = packet_icmp_alloc();
-		if (pkthdr->len < 14 + sizeof(*icmp_packet))
+		if (pkthdr->caplen < etherlen + sizeof(*icmp_packet))
 			return;
-		ft_memcpy(icmp_packet, packet + 14, sizeof(*icmp_packet));
+		ft_memcpy(icmp_packet, packet + etherlen, sizeof(*icmp_packet));
 		packet_push_icmp(arg->host, icmp_packet);
 	}
-	else
-		ft_putendl("invalid protocol");
 }
 
 void *port_listener(void *data)
 {
 	t_thread_arg *arg;
 	char errbuf[PCAP_ERRBUF_SIZE];
-	char *device;
 	bpf_u_int32 netp;
 	bpf_u_int32 maskp;
 	struct bpf_program fp;
 	char *str;
 
+	(void)arg;
 	arg = (t_thread_arg*)data;
 	signal(SIGALRM, sigalrm_handler);
-	if (!(device = pcap_lookupdev(errbuf)))
-	{
-		ft_putstr_fd("ft_nmap: pcap_loopupdev failed: ", 2);
-		ft_putendl_fd(errbuf, 2);
-		exit(EXIT_FAILURE);
-	}
-	if (pcap_lookupnet(device, &netp, &maskp, errbuf) == -1)
+	if (pcap_lookupnet("any", &netp, &maskp, errbuf) == -1)
 	{
 		ft_putstr_fd("ft_nmap: pcap_lookupnet failed: ", 2);
 		ft_putendl_fd(errbuf, 2);
 		exit(EXIT_FAILURE);
 	}
-	if (!(pcap_obj = pcap_open_live(device, BUFSIZ, 1, -1, errbuf)))
+	if (!(pcap_obj = pcap_open_live("any", BUFSIZ, 0, -1, errbuf)))
 	{
 		ft_putstr_fd("ft_nmap: pcap_open_live failed: ", 2);
 		ft_putendl_fd(errbuf, 2);

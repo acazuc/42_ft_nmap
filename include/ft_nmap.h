@@ -172,7 +172,7 @@ void forge_tcphdr_null(t_env *env, t_tcp_packet *packet, int16_t port, int pton_
 void forge_tcphdr_ack(t_env *env, t_tcp_packet *packet, int16_t port, int pton_addr);
 void forge_tcphdr_fin(t_env *env, t_tcp_packet *packet, int16_t port, int pton_addr);
 void forge_tcphdr_xmas(t_env *env, t_tcp_packet *packet, int16_t port, int pton_addr);
-void forge_udphdr(t_udp_packet *packet, int16_t port);
+void forge_udphdr(t_env *env, t_udp_packet *packet, int16_t port, int pton_addr);
 void *thread_run(void *data);
 void scan_port(t_thread_arg *thread_arg, int port);
 int16_t tcp_checksum(t_tcp_packet *packet, int pton_addr);
@@ -189,7 +189,7 @@ char *get_service_name(int port);
 void debug_tcp_packet(t_tcp_packet *packet);
 void debug_udp_packet(t_udp_packet *packet);
 void debug_icmp_packet(t_icmp_packet *packet);
-int16_t udp_checksum(t_udp_packet *packet);
+int16_t udp_checksum(t_udp_packet *packet, int pton_addr);
 void scan_port_udp(t_thread_arg *thread_arg, struct iphdr *ip_header, int port);
 void packet_flush_tcp(t_host *host, int port);
 void packet_flush_icmp(t_host *host, int port);

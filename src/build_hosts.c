@@ -65,7 +65,6 @@ static void build_addr(t_host *host)
 	}
 	ft_bzero(host->addr, host->addrlen);
 	host->addr->sa_family = AF_INET;
-	ft_putendl(host->ip);
 	if ((tmp = inet_addr(host->ip)) == INADDR_NONE)
 	{
 		ft_putendl_fd("ft_nmap: can't get binary ip", 2);

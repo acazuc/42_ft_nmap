@@ -7,11 +7,14 @@ void scan_port_udp(t_thread_arg *thread_arg, struct iphdr *ip_header, int port)
 	struct pollfd fds;
 	int retry;
 
-	retry = 0;
-	received = 0;
 	packet.ip_header = *ip_header;
-	forge_udphdr(&packet, port);
+	if (((struct sockaddr_in*)thread_arg->host->addr)->sin_addr.s_addr == htonl(2130706433))
+		forge_udphdr(thread_arg->env, &packet, port, htonl(2130706433));
+	else
+		forge_udphdr(thread_arg->env, &packet, port, thread_arg->env->local_ip);
 	packet_flush_icmp(thread_arg->host, port);
+	received = 0;
+	retry = 0;
 	while (retry < 3 && !received)
 	{
 		if (sendto(thread_arg->host->socket_udp, &packet, sizeof(packet), 0, thread_arg->host->addr, thread_arg->host->addrlen) == -1)
