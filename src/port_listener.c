@@ -76,8 +76,11 @@ void *port_listener(void *data)
 		{
 			if (listen_tcp(arg->host, packet_tcp))
 			{
-				packet_push_tcp(arg->host, packet_tcp);
-				packet_tcp = packet_tcp_alloc();
+				if (packet_tcp->tcp_header.dest == htons(arg->env->port))
+				{
+					packet_push_tcp(arg->host, packet_tcp);
+					packet_tcp = packet_tcp_alloc();
+				}
 			}
 		}
 		if (arg->env->type_udp)
