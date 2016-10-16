@@ -2,6 +2,7 @@
 # define FT_NMAP_H
 
 # include "../libft/include/libft.h"
+# include <netinet/if_ether.h>
 # include <sys/socket.h>
 # include <netinet/in.h>
 # include <linux/icmp.h>
@@ -23,6 +24,7 @@
 # include <fcntl.h>
 # include <stdio.h>
 # include <poll.h>
+# include <pcap.h>
 
 typedef struct s_env t_env;
 typedef struct s_host t_host;

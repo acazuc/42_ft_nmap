@@ -111,6 +111,70 @@ void sigalrm_handler(int sig)
 		pcap_breakloop(pcap_obj);
 }
 
+static t_tcp_packet *packet_tcp_alloc(void)
+{
+	t_tcp_packet *packet;
+
+	if (!(packet = malloc(sizeof(*packet))))
+	{
+		ft_putendl_fd("ft_nmap: can't malloc packet", 2);
+		exit(EXIT_FAILURE);
+	}
+	return (packet);
+}
+
+static t_icmp_packet *packet_icmp_alloc(void)
+{
+	t_icmp_packet *packet;
+
+	if (!(packet = malloc(sizeof(*packet))))
+	{
+		ft_putendl_fd("ft_nmap: can't malloc packet", 2);
+		exit(EXIT_FAILURE);
+	}
+	return (packet);
+}
+
+static void packet_callback(u_char *tmp, const struct pcap_pkthdr *pkthdr, const u_char *packet)
+{
+	(void)pkthdr;
+	t_thread_arg *arg;
+	unsigned short ethertype;
+	struct iphdr iphdr;
+
+	(void)arg;
+	arg = (t_thread_arg*)tmp;
+	if (pkthdr->len < 14 + sizeof(iphdr))
+		return;
+	ft_memcpy(&ethertype, packet + 12, sizeof(ethertype));
+	if (ntohs(ethertype) != 0x0800)
+		return;
+	memcpy(&iphdr, packet + 14, sizeof(iphdr));
+	if (iphdr.saddr != ((struct sockaddr_in*)arg->host->addr)->sin_addr.s_addr)
+		return;
+	if (iphdr.protocol == IPPROTO_TCP)
+	{
+		t_tcp_packet *tcp_packet = packet_tcp_alloc();
+		if (pkthdr->len < 14 + sizeof(*tcp_packet))
+			return;
+		ft_memcpy(tcp_packet, packet + 14, sizeof(*tcp_packet));
+		if (tcp_packet->tcp_header.dest == htons(arg->env->port))
+		{
+			packet_push_tcp(arg->host, tcp_packet);
+		}
+	}
+	else if (iphdr.protocol == IPPROTO_ICMP)
+	{
+		t_icmp_packet *icmp_packet = packet_icmp_alloc();
+		if (pkthdr->len < 14 + sizeof(*icmp_packet))
+			return;
+		ft_memcpy(icmp_packet, packet + 14, sizeof(*icmp_packet));
+		packet_push_icmp(arg->host, icmp_packet);
+	}
+	else
+		ft_putendl("invalid protocol");
+}
+
 void *port_listener(void *data)
 {
 	t_thread_arg *arg;
@@ -118,8 +182,10 @@ void *port_listener(void *data)
 	char *device;
 	bpf_u_int32 netp;
 	bpf_u_int32 maskp;
-	bfp_program fp;
+	struct bpf_program fp;
+	char *str;
 
+	arg = (t_thread_arg*)data;
 	signal(SIGALRM, sigalrm_handler);
 	if (!(device = pcap_lookupdev(errbuf)))
 	{
@@ -139,7 +205,17 @@ void *port_listener(void *data)
 		ft_putendl_fd(errbuf, 2);
 		exit(EXIT_FAILURE);
 	}
-	if (pcap_compile(pcap_obj, &fp, "tcp or icmp", 1, netp) == -1)
+	if (!(str = ft_strjoin("host ", arg->host->ip)))
+	{
+		ft_putendl_fd("ft_nmap: ft_strjoin failed", 2);
+		exit(EXIT_FAILURE);
+	}
+	if (!(str = ft_strjoin_free1(str, " and (tcp or icmp)")))
+	{
+		ft_putendl_fd("ft_nmap: ft_strjoin failed", 2);
+		exit(EXIT_FAILURE);
+	}
+	if (pcap_compile(pcap_obj, &fp, str, 1, netp) == -1)
 	{
 		ft_putstr_fd("ft_nmap: pcap_compile failed", 2);
 		exit(EXIT_FAILURE);
@@ -149,10 +225,11 @@ void *port_listener(void *data)
 		ft_putstr_fd("ft_nmap: pcap_setfilter failed", 2);
 		exit(EXIT_FAILURE);
 	}
-	if (pcap_loop(pcap_obj, -1, packet_callback, NULL) == -1)
+	if (pcap_loop(pcap_obj, -1, packet_callback, (u_char*)data) == -1)
 	{
 		ft_putstr_fd("ft_nmap: pcap_loop failed", 2);
 		exit(EXIT_FAILURE);
 	}
+	free(str);
 	return (NULL);
 }

@@ -6,7 +6,7 @@
 #    By: acazuc <acazuc@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2015/11/25 06:50:12 by acazuc            #+#    #+#              #
-#    Updated: 2016/10/16 11:46:23 by acazuc           ###   ########.fr        #
+#    Updated: 2016/10/16 15:25:40 by acazuc           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -14,7 +14,7 @@ NAME = ft_nmap
 
 CC = gcc
 
-CFLAGS = -Wall -Wextra -Werror -Ofast
+CFLAGS = -Wall -Wextra -Werror -Ofast -fdiagnostics-color=auto
 
 INCLUDES_PATH = include/
 
@@ -73,7 +73,7 @@ OBJS_NAME = $(SRCS_NAME:.c=.o)
 
 OBJS = $(addprefix $(OBJS_PATH), $(OBJS_NAME))
 
-LIBRARY = -L libft -lft -lpthread
+LIBRARY = -L libft -lft -lpthread -lpcap
 
 all: odir $(NAME)
 
