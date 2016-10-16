@@ -16,8 +16,14 @@
 void my_callback(u_char *useless,const struct pcap_pkthdr* pkthdr,const u_char*
 		packet)
 {
+	unsigned short ethertype;
+	memcpy(&ethertype, packet + 12, sizeof(ethertype));
+	if (ntohs(ethertype) != 0x0800)
+	{
+		printf("invalid ethertype (%hx)\n", ethertype);
+		return;
+	}
 	struct iphdr iphdr;
-	static int count = 1;
 	memcpy(&iphdr, packet + 14, sizeof(iphdr));
 	if (iphdr.protocol == IPPROTO_TCP)
 	{
@@ -29,7 +35,6 @@ void my_callback(u_char *useless,const struct pcap_pkthdr* pkthdr,const u_char*
 	}
 	else
 		printf("unknown protocol\n");
-	count++;
 }
 
 int main(int argc,char **argv)

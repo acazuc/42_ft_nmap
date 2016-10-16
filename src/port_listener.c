@@ -1,5 +1,5 @@
 #include "ft_nmap.h"
-
+/*
 static int listen_tcp(t_host *host, t_tcp_packet *packet)
 {
 	if (recvfrom(host->socket_tcp, packet, sizeof(*packet), 0, host->addr, (socklen_t*)(&host->addrlen)) == -1)
@@ -100,4 +100,40 @@ void *port_listener(void *data)
 		}
 	}
 	return (NULL);
+}*/
+
+static pcap_t *pcap_obj = NULL;
+
+void sigalrm_handler(int sig)
+{
+	(void)sig;
+	if (pcap_obj)
+		pcap_breakloop(pcap_obj);
+}
+
+void *port_listener(void *data)
+{
+	t_thread_arg *arg;
+	char errbuf[PCAP_ERRBUF_SIZE];
+	char *device;
+
+	signal(SIGALRM, sigalrm_handler);
+	if (!(device = pcap_lookupdev(errbuf)))
+	{
+		ft_putstr_fd("ft_nmap: pcap_loopupdev failed: ", 2);
+		ft_putendl_fd(errbuf, 2);
+		exit(EXIT_FAILURE);
+	}
+	if (pcap_lookupnet(device, &netp, &maskp, errbuf) == -1)
+	{
+		ft_putstr_fd("ft_nmap: pcap_lookupnet failed: ", 2);
+		ft_putendl_fd(errbuf, 2);
+		exit(EXIT_FAILURE);
+	}
+	if (!(pcap_obj = pcap_open_live(device, BUFSIZ, 1, -1, errbuf)))
+	{
+		ft_putstr_fd("ft_nmap: pcap_open_live failed: ", 2);
+		ft_putendl_fd(errbuf, 2);
+		exit(EXIT_FAILURE);
+	}
 }
