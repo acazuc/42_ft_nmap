@@ -12,6 +12,7 @@
 # include <sys/time.h>
 # include <linux/ip.h>
 # include <pthread.h>
+# include <ifaddrs.h>
 # include <stdlib.h>
 # include <unistd.h>
 # include <stdint.h>
