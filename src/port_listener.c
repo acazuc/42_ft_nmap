@@ -116,6 +116,9 @@ void *port_listener(void *data)
 	t_thread_arg *arg;
 	char errbuf[PCAP_ERRBUF_SIZE];
 	char *device;
+	bpf_u_int32 netp;
+	bpf_u_int32 maskp;
+	bfp_program fp;
 
 	signal(SIGALRM, sigalrm_handler);
 	if (!(device = pcap_lookupdev(errbuf)))
@@ -136,4 +139,20 @@ void *port_listener(void *data)
 		ft_putendl_fd(errbuf, 2);
 		exit(EXIT_FAILURE);
 	}
+	if (pcap_compile(pcap_obj, &fp, "tcp or icmp", 1, netp) == -1)
+	{
+		ft_putstr_fd("ft_nmap: pcap_compile failed", 2);
+		exit(EXIT_FAILURE);
+	}
+	if (pcap_setfilter(pcap_obj, &fp) == -1)
+	{
+		ft_putstr_fd("ft_nmap: pcap_setfilter failed", 2);
+		exit(EXIT_FAILURE);
+	}
+	if (pcap_loop(pcap_obj, -1, packet_callback, NULL) == -1)
+	{
+		ft_putstr_fd("ft_nmap: pcap_loop failed", 2);
+		exit(EXIT_FAILURE);
+	}
+	return (NULL);
 }
