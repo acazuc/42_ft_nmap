@@ -1,6 +1,5 @@
 #include "ft_nmap.h"
 
-
 int main(int ac, char **av)
 {
 	t_env env;

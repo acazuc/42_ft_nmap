@@ -6,7 +6,7 @@
 /*   By: acazuc <acazuc@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/10/15 16:35:09 by acazuc            #+#    #+#             */
-/*   Updated: 2016/10/16 16:40:03 by acazuc           ###   ########.fr       */
+/*   Updated: 2016/10/17 18:29:46 by acazuc           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,10 @@ void	resolve_self_ip(t_env *env)
 			continue;
 		}
 		env->local_ip = ((struct sockaddr_in*)lst->ifa_addr)->sin_addr.s_addr;
+		if (lst->ifa_netmask)
+		{
+			ft_putendl(inet_ntoa(((struct sockaddr_in*)lst->ifa_netmask)->sin_addr));
+		}
 		freeifaddrs(origin);
 		return;
 	}
