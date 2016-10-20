@@ -5,8 +5,7 @@ static pcap_t *pcap_obj = NULL;
 void sigalrm_handler(int sig)
 {
 	(void)sig;
-	if (pcap_obj)
-		pcap_breakloop(pcap_obj);
+	pcap_breakloop(pcap_obj);
 }
 
 static t_tcp_packet *packet_tcp_alloc(void)
@@ -85,7 +84,6 @@ void *port_listener(void *data)
 
 	(void)arg;
 	arg = (t_thread_arg*)data;
-	signal(SIGALRM, sigalrm_handler);
 	if (pcap_lookupnet("any", &netp, &maskp, errbuf) == -1)
 	{
 		ft_putstr_fd("ft_nmap: pcap_lookupnet failed: ", 2);
@@ -118,6 +116,7 @@ void *port_listener(void *data)
 		ft_putstr_fd("ft_nmap: pcap_setfilter failed", 2);
 		exit(EXIT_FAILURE);
 	}
+	signal(SIGALRM, sigalrm_handler);
 	if (pcap_loop(pcap_obj, -1, packet_callback, (u_char*)data) == -1)
 	{
 		ft_putstr_fd("ft_nmap: pcap_loop failed", 2);
