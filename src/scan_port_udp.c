@@ -8,10 +8,7 @@ void scan_port_udp(t_thread_arg *thread_arg, struct iphdr *ip_header, int port)
 	int retry;
 
 	packet.ip_header = *ip_header;
-	if (((struct sockaddr_in*)thread_arg->host->addr)->sin_addr.s_addr == htonl(2130706433))
-		forge_udphdr(thread_arg->env, &packet, port, htonl(2130706433));
-	else
-		forge_udphdr(thread_arg->env, &packet, port, thread_arg->env->local_ip);
+	forge_udphdr(thread_arg->env, &packet, port, get_send_ip(thread_arg));
 	packet_flush_icmp(thread_arg->host, port);
 	received = 0;
 	retry = 0;
