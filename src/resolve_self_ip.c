@@ -6,7 +6,7 @@
 /*   By: acazuc <acazuc@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/10/15 16:35:09 by acazuc            #+#    #+#             */
-/*   Updated: 2016/10/17 18:29:46 by acazuc           ###   ########.fr       */
+/*   Updated: 2016/10/20 20:28:44 by acazuc           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@ void	resolve_self_ip(t_env *env)
 {
 	struct ifaddrs *origin;
 	struct ifaddrs *lst;
+	char ipset = 0;
 
 	getifaddrs(&origin);
 	lst = origin;
@@ -33,19 +34,24 @@ void	resolve_self_ip(t_env *env)
 		}
 		if (!ft_strcmp(lst->ifa_name, "lo"))
 		{
-			lst = lst->ifa_next;
-			continue;
+			ipset |= 1;
+			env->loopback_ip = ((struct sockaddr_in*)lst->ifa_addr)->sin_addr.s_addr;
 		}
-		env->local_ip = ((struct sockaddr_in*)lst->ifa_addr)->sin_addr.s_addr;
-		if (lst->ifa_netmask)
+		else if (ipset & 2)
 		{
-			ft_putendl(inet_ntoa(((struct sockaddr_in*)lst->ifa_netmask)->sin_addr));
+			ft_putendl_fd("ft_nmap: ip network collision; passing", 2);
 		}
-		freeifaddrs(origin);
-		return;
+		else
+		{
+			ipset |= 2;
+			env->local_ip = ((struct sockaddr_in*)lst->ifa_addr)->sin_addr.s_addr;
+		}
+		lst = lst->ifa_next;
 	}
 	if (origin)
 		freeifaddrs(origin);
-	ft_putendl_fd("nmap: can't resolve external ip", 2);
+	if (ipset == 3)
+		return;
+	ft_putendl_fd("ft_nmap: can't resolve external ip", 2);
 	exit(EXIT_FAILURE);
 }

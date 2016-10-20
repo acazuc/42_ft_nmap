@@ -44,6 +44,7 @@ struct s_env
 	char ports[USHRT_MAX + 1];
 	int threads_nb;
 	int local_ip;
+	int loopback_ip;
 	unsigned short port;
 	char type_syn;
 	char type_null;
