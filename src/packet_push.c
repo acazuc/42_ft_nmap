@@ -9,7 +9,7 @@ void packet_push_tcp(t_host *host, t_tcp_packet *packet)
 	{
 		if (!(new = malloc(sizeof(*new))))
 		{
-			ft_putendl_fd("Can't malloc new packet list", 2);
+			fprintf(stderr, "Can't malloc new packet list\n");
 			exit(EXIT_FAILURE);
 		}
 		new->packet = packet;
@@ -35,7 +35,7 @@ void packet_push_icmp(t_host *host, t_icmp_packet *packet)
 		{
 			if (!(new = malloc(sizeof(*new))))
 			{
-				ft_putendl_fd("Can't malloc new packet list", 2);
+				fprintf(stderr, "Can't malloc new packet list\n");
 				exit(EXIT_FAILURE);
 			}
 			new->packet = packet;

@@ -16,12 +16,12 @@ char *get_scan_result_str(char *type, enum e_port_status result)
 		status = "Unfiltered";
 	else if (result == OPEN_FILTERED)
 		status = "Open|Filtered";
-	if (!(rslt = malloc(strlen(type) + strlen(status) + 3)))
+	if (!(rslt = malloc(ft_strlen(type) + ft_strlen(status) + 3)))
 	{
-		ft_putendl_fd("ft_nmap: can't malloc result string", 2);
+		fprintf(stderr, "ft_nmap: can't malloc result string\n");
 		exit(EXIT_FAILURE);
 	}
-	ft_bzero(rslt, strlen(type) + strlen(status) + 3);
+	ft_memset(rslt, 0, ft_strlen(type) + ft_strlen(status) + 3);
 	rslt = ft_strcat(rslt, type);
 	rslt = ft_strcat(rslt, "(");
 	rslt = ft_strcat(rslt, status);

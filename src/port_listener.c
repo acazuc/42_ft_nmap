@@ -14,7 +14,7 @@ static t_tcp_packet *packet_tcp_alloc(void)
 
 	if (!(packet = malloc(sizeof(*packet))))
 	{
-		ft_putendl_fd("ft_nmap: can't malloc packet", 2);
+		fprintf(stderr, "ft_nmap: can't malloc packet\n");
 		exit(EXIT_FAILURE);
 	}
 	return (packet);
@@ -26,7 +26,7 @@ static t_icmp_packet *packet_icmp_alloc(void)
 
 	if (!(packet = malloc(sizeof(*packet))))
 	{
-		ft_putendl_fd("ft_nmap: can't malloc packet", 2);
+		fprintf(stderr, "ft_nmap: can't malloc packet\n");
 		exit(EXIT_FAILURE);
 	}
 	return (packet);
@@ -49,7 +49,7 @@ static void packet_callback(u_char *tmp, const struct pcap_pkthdr *pkthdr, const
 		etherlen = 16;
 	else if (ntohs(ethertype) != 0x0800)
 		return;
-	memcpy(&iphdr, packet + etherlen, sizeof(iphdr));
+	ft_memcpy(&iphdr, packet + etherlen, sizeof(iphdr));
 	if (iphdr.saddr != ((struct sockaddr_in*)arg->host->addr)->sin_addr.s_addr)
 		return;
 	if (iphdr.protocol == IPPROTO_TCP)
@@ -86,40 +86,38 @@ void *port_listener(void *data)
 	arg = (t_thread_arg*)data;
 	if (pcap_lookupnet("any", &netp, &maskp, errbuf) == -1)
 	{
-		ft_putstr_fd("ft_nmap: pcap_lookupnet failed: ", 2);
-		ft_putendl_fd(errbuf, 2);
+		fprintf(stderr, "ft_nmap: pcap_lookupnet failed: %s\n", errbuf);
 		exit(EXIT_FAILURE);
 	}
 	if (!(pcap_obj = pcap_open_live("any", BUFSIZ, 0, -1, errbuf)))
 	{
-		ft_putstr_fd("ft_nmap: pcap_open_live failed: ", 2);
-		ft_putendl_fd(errbuf, 2);
+		fprintf(stderr, "ft_nmap: pcap_open_live failed: %s\n", errbuf);
 		exit(EXIT_FAILURE);
 	}
 	if (!(str = ft_strjoin("host ", arg->host->ip)))
 	{
-		ft_putendl_fd("ft_nmap: ft_strjoin failed", 2);
+		fprintf(stderr, "ft_nmap: ft_strjoin failed\n");
 		exit(EXIT_FAILURE);
 	}
 	if (!(str = ft_strjoin_free1(str, " and (tcp or icmp)")))
 	{
-		ft_putendl_fd("ft_nmap: ft_strjoin failed", 2);
+		fprintf(stderr, "ft_nmap: ft_strjoin failed\n");
 		exit(EXIT_FAILURE);
 	}
 	if (pcap_compile(pcap_obj, &fp, str, 1, netp) == -1)
 	{
-		ft_putstr_fd("ft_nmap: pcap_compile failed", 2);
+		fprintf(stderr, "ft_nmap: pcap_compile failed\n");
 		exit(EXIT_FAILURE);
 	}
 	if (pcap_setfilter(pcap_obj, &fp) == -1)
 	{
-		ft_putstr_fd("ft_nmap: pcap_setfilter failed", 2);
+		fprintf(stderr, "ft_nmap: pcap_setfilter failed\n");
 		exit(EXIT_FAILURE);
 	}
 	signal(SIGALRM, sigalrm_handler);
 	if (pcap_loop(pcap_obj, -1, packet_callback, (u_char*)data) == -1)
 	{
-		ft_putstr_fd("ft_nmap: pcap_loop failed", 2);
+		fprintf(stderr, "ft_nmap: pcap_loop failed\n");
 		exit(EXIT_FAILURE);
 	}
 	free(str);

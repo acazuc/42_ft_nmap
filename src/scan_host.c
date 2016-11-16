@@ -13,7 +13,7 @@ static void run_threads(t_env *env, t_host *host)
 	listener_arg.host = host;
 	if (pthread_create(&listener, NULL, &port_listener, &listener_arg))
 	{
-		ft_putendl_fd("ft_nmap: can't create thread", 2);
+		fprintf(stderr, "ft_nmap: can't create thread\n");
 		exit(EXIT_FAILURE);
 	}
 	i = 0;
@@ -25,7 +25,7 @@ static void run_threads(t_env *env, t_host *host)
 		thread_args[i].thread_id = i;
 		if (pthread_create(&threads[i], NULL, &thread_run, &thread_args[i]))
 		{
-			ft_putendl_fd("ft_nmap: can't create thread", 2);
+			fprintf(stderr, "ft_nmap: can't create thread\n");
 			exit(EXIT_FAILURE);
 		}
 		i++;
@@ -46,16 +46,12 @@ void scan_host(t_env *env, t_host *host)
 	size_t start;
 	size_t duration;
 
-	ft_putchar('\n');
-	ft_putstr("Scanning ");
-	ft_putstr(host->ip);
+	printf("\nScanning %s", host->ip);
 	if (ft_strcmp(host->ip, host->host))
 	{
-		ft_putstr(" (");
-		ft_putstr(host->host);
-		ft_putchar(')');
+		printf(" (%s)", host->host);
 	}
-	ft_putchar('\n');
+	printf("\n");
 	start = epoch_micro();
 	run_threads(env, host);
 	duration = epoch_micro() - start;

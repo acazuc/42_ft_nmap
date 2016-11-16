@@ -20,7 +20,7 @@ void reserve_port(t_env *env)
 
 	if ((sockfd = socket(AF_INET, SOCK_STREAM, 0)) == -1)
 	{
-		ft_putendl_fd("ft_nmap: socket() failed", 2);
+		fprintf(stderr, "ft_nmap: socket() failed\n");
 		exit(EXIT_FAILURE);
 	}
 	sa.sin_family = AF_INET;
@@ -36,6 +36,6 @@ void reserve_port(t_env *env)
 		}
 		++i;
 	}
-	ft_putendl_fd("ft_nmap: can't bind port", 2);
+	fprintf(stderr, "ft_nmap: can't bind port\n");
 	exit(EXIT_FAILURE);
 }

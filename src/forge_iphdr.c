@@ -2,7 +2,7 @@
 
 void forge_iphdr(struct iphdr *header, int protocol, int pton_addr, size_t packlen)
 {
-	ft_bzero(header, sizeof(*header));
+	ft_memset(header, 0, sizeof(*header));
 	header->version = 4;
 	header->ihl = 5;
 	header->tos = 16;

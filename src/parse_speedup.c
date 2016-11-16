@@ -7,19 +7,19 @@ void parse_speedup(t_env *env, char *speedup)
 	env->defined_speedup = 1;
 	if (!ft_strisdigit(speedup))
 	{
-		ft_putendl_fd("ft_nmap: invalid speedup value", 2);
+		fprintf(stderr, "ft_nmap: invalid speedup value\n");
 		print_help();
 	}
 	while (speedup[0] == '0')
 		speedup++;
 	if (ft_strlen(speedup) > 3 || !speedup[0])
 	{
-		ft_putendl_fd("ft_nmap: invalid speedup value", 2);
+		fprintf(stderr, "ft_nmap: invalid speedup value\n");
 		print_help();
 	}
 	if ((atoied = ft_atoi(speedup)) > 250 || atoied < 1)
 	{
-		ft_putendl_fd("ft_nmap: invalid speedup value", 2);
+		fprintf(stderr, "ft_nmap: invalid speedup value\n");
 		exit(EXIT_FAILURE);
 	}
 	env->threads_nb = atoied;

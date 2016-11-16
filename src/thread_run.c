@@ -30,7 +30,7 @@ void *thread_run(void *data)
 	int i;
 
 	thread_arg = (t_thread_arg*)data;
-	ft_bzero(ports, sizeof(ports));
+	ft_memset(ports, 0, sizeof(ports));
 	fill_ports(thread_arg, &(ports[0]));
 	i = 0;
 	while (i < 65536)

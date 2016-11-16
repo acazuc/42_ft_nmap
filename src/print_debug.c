@@ -7,9 +7,7 @@ static void print_hosts(t_env *env)
 	i = 0;
 	while (env->ips[i])
 	{
-		ft_putstr(" '");
-		ft_putstr(env->ips[i]);
-		ft_putchar('\'');
+		printf(" '%s'", env->ips[i]);
 		i++;
 	}
 }
@@ -17,32 +15,24 @@ static void print_hosts(t_env *env)
 static void print_scans(t_env *env)
 {
 	if (env->type_syn)
-		ft_putstr(" SYN");
+		printf(" SYN");
 	if (env->type_null)
-		ft_putstr(" NULL");
+		printf(" NULL");
 	if (env->type_ack)
-		ft_putstr(" ACK");
+		printf(" ACK");
 	if (env->type_fin)
-		ft_putstr(" FIN");
+		printf(" FIN");
 	if (env->type_xmas)
-		ft_putstr(" XMAS");
+		printf(" XMAS");
 	if (env->type_udp)
-		ft_putstr(" UDP");
+		printf(" UDP");
 }
 
 void print_debug(t_env *env)
 {
-	ft_putendl("Scan Configurations");
-	ft_putstr("Target ip addresses: ");
+	printf("Scan Configurations\nTarget ip addresses: ");
 	print_hosts(env);
-	ft_putchar('\n');
-	ft_putstr("Number of ports to scan: ");
-	ft_putnbr(get_ports_number(env));
-	ft_putchar('\n');
-	ft_putstr("Scans to be performed:");
+	printf("\nNumber of ports to scan: %d\nScans to be performed:", get_ports_number(env));
 	print_scans(env);
-	ft_putchar('\n');
-	ft_putstr("Number of threads: ");
-	ft_putnbr(env->threads_nb);
-	ft_putchar('\n');
+	printf("\nNumber of threads: %d\n", env->threads_nb);
 }

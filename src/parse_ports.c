@@ -24,12 +24,12 @@ static void parse_port_part(t_env *env, char *part)
 
 	if (!(splitted = ft_strsplit(part, '-')))
 	{
-		ft_putendl_fd("ft_nmap: can't malloc splitted ports", 2);
+		fprintf(stderr, "ft_nmap: can't malloc splitted ports\n");
 		exit(EXIT_FAILURE);
 	}
 	if (!splitted[0] || splitted[2] || !valid_port(splitted[0]) || (splitted[1] && !valid_port(splitted[1])))
 	{
-		ft_putendl_fd("ft_nmap: invalid ports format", 2);
+		fprintf(stderr, "ft_nmap: invalid ports format\n");
 		print_help();
 	}
 	if (splitted[1])
@@ -46,7 +46,7 @@ void parse_ports(t_env *env, char *ports)
 	env->defined_ports = 1;
 	if (!(splitted = ft_strsplit(ports, ',')))
 	{
-		ft_putendl_fd("ft_nmap: can't malloc splitted ports", 2);
+		fprintf(stderr, "ft_nmap: can't malloc splitted ports\n");
 		exit(EXIT_FAILURE);
 	}
 	i = 0;

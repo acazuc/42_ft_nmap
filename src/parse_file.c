@@ -6,19 +6,17 @@ void parse_file(t_env *env, char *file)
 
 	if (env->ips)
 	{
-		ft_putendl_fd("ft_nmap: already defined ip", 2);
+		fprintf(stderr, "ft_nmap: already defined ip\n");
 		exit(EXIT_FAILURE);
 	}
 	if (!(content = file_get_contents(file)))
 	{
-	  	ft_putstr_fd("ft_nmap: can't get '", 2);
-		ft_putstr_fd(file, 2);
-		ft_putendl_fd("' file", 2);
+	  	fprintf(stderr, "ft_nmap: can't get '%s' file\n", file);
 		exit(EXIT_FAILURE);
 	}
 	if (!(env->ips = ft_strsplit(content, '\n')))
 	{
-		ft_putendl_fd("ft_nmap: can't split file ips", 2);
+		fprintf(stderr, "ft_nmap: can't split file ips\n");
 		exit(EXIT_FAILURE);
 	}
 }

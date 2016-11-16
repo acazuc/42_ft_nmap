@@ -2,7 +2,7 @@
 
 static void forge_tcphdr_common(t_env *env, struct tcphdr *header, int16_t port)
 {
-	ft_bzero(header, sizeof(*header));
+	ft_memset(header, 0, sizeof(*header));
 	header->source = htons(env->port);
 	header->dest = htons(port);
 	header->seq = epoch_micro();

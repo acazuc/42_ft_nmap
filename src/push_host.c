@@ -10,7 +10,7 @@ void push_host(t_env *env, t_host *host)
 		len++;
 	if (!(new = malloc(sizeof(*new) * (len + 2))))
 	{
-		ft_putendl_fd("ft_nmap: can't malloc new host array", 2);
+		fprintf(stderr, "ft_nmap: can't malloc new host array\n");
 		exit(EXIT_FAILURE);
 	}
 	len = 0;

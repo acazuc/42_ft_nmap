@@ -16,7 +16,7 @@ void scan_port_udp(t_thread_arg *thread_arg, struct iphdr *ip_header, int port)
 	{
 		if (sendto(thread_arg->host->socket_udp, &packet, sizeof(packet), 0, thread_arg->host->addr, thread_arg->host->addrlen) == -1)
 		{
-			ft_putendl_fd("ft_nmap: failed to send packet", 2);
+			fprintf(stderr, "ft_nmap: failed to send packet\n");
 			exit(EXIT_FAILURE);
 		}
 		int looper = 0;
@@ -32,7 +32,7 @@ void scan_port_udp(t_thread_arg *thread_arg, struct iphdr *ip_header, int port)
 			fds.revents = 0;
 			if (poll(&fds, 0, 100) == -1)
 			{
-				ft_putendl_fd("ft_nmap: poll failed", 2);
+				fprintf(stderr, "ft_nmap: poll failed\n");
 				exit(EXIT_FAILURE);
 			}
 			looper++;

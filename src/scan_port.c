@@ -7,7 +7,7 @@ void scan_port(t_thread_arg *thread_arg, int port)
 
 	if (inet_pton(AF_INET, thread_arg->host->ip, &pton_addr) != 1)
 	{
-		ft_putendl_fd("ft_nmap: can't inet_pton ip", 2);
+		fprintf(stderr, "ft_nmap: can't inet_pton ip\n");
 		exit(EXIT_FAILURE);
 	}
 	pthread_mutex_lock(&thread_arg->host->mutex_tcp);

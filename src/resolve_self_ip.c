@@ -32,14 +32,14 @@ void	resolve_self_ip(t_env *env)
 			lst = lst->ifa_next;
 			continue;
 		}
-		if (!ft_strcmp(lst->ifa_name, "lo"))
+		if (!strcmp(lst->ifa_name, "lo"))
 		{
 			ipset |= 1;
 			env->loopback_ip = ((struct sockaddr_in*)lst->ifa_addr)->sin_addr.s_addr;
 		}
 		else if (ipset & 2)
 		{
-			ft_putendl_fd("ft_nmap: ip network collision; passing", 2);
+			fprintf(stderr, "ft_nmap: ip network collision; passing\n");
 		}
 		else
 		{
@@ -52,6 +52,6 @@ void	resolve_self_ip(t_env *env)
 		freeifaddrs(origin);
 	if (ipset == 3)
 		return;
-	ft_putendl_fd("ft_nmap: can't resolve external ip", 2);
+	fprintf(stderr, "ft_nmap: can't resolve external ip\n");
 	exit(EXIT_FAILURE);
 }

@@ -8,7 +8,7 @@ int16_t tcp_checksum(t_tcp_packet *packet, int pton_addr)
 	int16_t len;
 
 	len = sizeof(t_tcp_packet) - sizeof(struct iphdr);
-	ft_bzero(&pseudo_hdr, sizeof(pseudo_hdr));
+	ft_memset(&pseudo_hdr, 0, sizeof(pseudo_hdr));
 	pseudo_hdr.source = pton_addr;
 	pseudo_hdr.dest = packet->ip_header.daddr;
 	pseudo_hdr.blank = 0;
@@ -16,7 +16,7 @@ int16_t tcp_checksum(t_tcp_packet *packet, int pton_addr)
 	pseudo_hdr.len = htons(len);
 	if (!(result = malloc(len + sizeof(pseudo_hdr))))
 	{
-		ft_putendl_fd("ft_nmap: can't build tcp checksum", 2);
+		fprintf(stderr, "ft_nmap: can't build tcp checksum\n");
 		exit(EXIT_FAILURE);
 	}
 	ft_memcpy(result, &pseudo_hdr, sizeof(pseudo_hdr));
