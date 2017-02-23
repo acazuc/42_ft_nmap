@@ -13,7 +13,7 @@ static void run_threads(t_env *env, t_host *host)
 	listener_arg.host = host;
 	if (pthread_create(&listener, NULL, &port_listener, &listener_arg))
 	{
-		fprintf(stderr, "ft_nmap: can't create thread\n");
+		fprintf(stderr, RED "ft_nmap: can't create thread\n" DEFAULT);
 		exit(EXIT_FAILURE);
 	}
 	i = 0;
@@ -25,7 +25,7 @@ static void run_threads(t_env *env, t_host *host)
 		thread_args[i].thread_id = i;
 		if (pthread_create(&threads[i], NULL, &thread_run, &thread_args[i]))
 		{
-			fprintf(stderr, "ft_nmap: can't create thread\n");
+			fprintf(stderr, RED "ft_nmap: can't create thread\n" DEFAULT);
 			exit(EXIT_FAILURE);
 		}
 		i++;
@@ -46,16 +46,16 @@ void scan_host(t_env *env, t_host *host)
 	size_t start;
 	size_t duration;
 
-	printf("\nScanning %s", host->ip);
+	printf("\n" SKY "Scanning " GREEN "%s" WHITE, host->ip);
 	if (ft_strcmp(host->ip, host->host))
 	{
-		printf(" (%s)", host->host);
+		printf(WHITE " (" PEACHY "%s" WHITE ")", host->host);
 	}
-	printf("\n");
+	printf("\n" DEFAULT);
 	start = epoch_micro();
 	run_threads(env, host);
 	duration = epoch_micro() - start;
-	printf("Scan took %f seconds\n", duration / 1000000.0);
+	printf("Scan took " PURPLE "%f" WHITE " seconds\n", duration / 1000000.0);
 	fflush(stdout);
 	print_result(env, host);
 }

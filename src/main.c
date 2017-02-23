@@ -6,14 +6,14 @@ int main(int ac, char **av)
 
 	if (getuid())
 	{
-		fprintf(stderr, "ft_nmap: You must have sudo rights to run this command\n");
+		fprintf(stderr, RED "ft_nmap: You must have sudo rights to run this command\n" DEFAULT);
 		exit(EXIT_FAILURE);
 	}
 	env_init(&env);
 	parse_params(&env, ac, av);
 	if (!env.ips)
 	{
-		fprintf(stderr, "ft_nmap: You must choose an ip to scan\n");
+		fprintf(stderr, RED "ft_nmap: You must choose an ip to scan\n" DEFAULT);
 		print_help();
 		exit(EXIT_FAILURE);
 	}

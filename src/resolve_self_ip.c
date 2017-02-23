@@ -39,7 +39,7 @@ void	resolve_self_ip(t_env *env)
 		}
 		else if (ipset & 2)
 		{
-			fprintf(stderr, "ft_nmap: ip network collision; passing\n");
+			fprintf(stderr, RED "ft_nmap: ip network collision; passing\n" DEFAULT);
 		}
 		else
 		{
@@ -52,6 +52,6 @@ void	resolve_self_ip(t_env *env)
 		freeifaddrs(origin);
 	if (ipset == 3)
 		return;
-	fprintf(stderr, "ft_nmap: can't resolve external ip\n");
+	fprintf(stderr, RED "ft_nmap: can't resolve external ip\n" DEFAULT);
 	exit(EXIT_FAILURE);
 }

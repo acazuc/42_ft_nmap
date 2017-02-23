@@ -16,7 +16,7 @@ static void add_scan(t_env *env, char *scan)
 		env->type_udp = 1;
 	else
 	{
-		fprintf(stderr, "ft_nmap: invalid scan type\n");
+		fprintf(stderr, RED "ft_nmap: invalid scan type\n" DEFAULT);
 		print_help();
 	}
 }
@@ -29,12 +29,12 @@ void parse_scan(t_env *env, char *scans)
 	env->defined_scans = 1;
 	if (!(splitted = ft_strsplit(scans, ',')))
 	{
-		fprintf(stderr, "ft_nmap: can't split scans value\n");
+		fprintf(stderr, RED "ft_nmap: can't split scans value\n" DEFAULT);
 		exit(EXIT_FAILURE);
 	}
 	if (!(splitted[0]))
 	{
-		fprintf(stderr, "ft_nmap: must specify at least one scan type\n");
+		fprintf(stderr, RED "ft_nmap: must specify at least one scan type\n" DEFAULT);
 		exit(EXIT_FAILURE);
 	}
 	i = 0;

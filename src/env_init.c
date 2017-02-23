@@ -4,7 +4,7 @@ static void init_hosts(t_env *env)
 {
 	if (!(env->hosts = malloc(sizeof(*env->hosts))))
 	{
-		fprintf(stderr, "ft_nmap: can't malloc host array\n");
+		fprintf(stderr, RED "ft_nmap: can't malloc host array\n" DEFAULT);
 		exit(EXIT_FAILURE);
 	}
 	env->hosts[0] = NULL;

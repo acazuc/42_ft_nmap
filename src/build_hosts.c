@@ -21,7 +21,7 @@ static int build_tcp(t_host *host)
 {
 	if (!build_socket(&host->socket_tcp, IPPROTO_TCP))
 	{
-		fprintf(stderr, "ft_nmap: can't connect to '%s' host\n", host->host);
+		fprintf(stderr, RED "ft_nmap: can't connect to '%s' host\n" DEFAULT, host->host);
 		return (0);
 	}
 	return (1);
@@ -31,7 +31,7 @@ static int build_udp(t_host *host)
 {
 	if (!build_socket(&host->socket_udp, IPPROTO_UDP))
 	{
-		fprintf(stderr, "ft_nmap: can't connect to '%s' host\n", host->host);
+		fprintf(stderr, RED "ft_nmap: can't connect to '%s' host\n" DEFAULT, host->host);
 		return (0);
 	}
 	return (1);
@@ -41,7 +41,7 @@ static int build_icmp(t_host *host)
 {
 	if (!build_socket(&host->socket_icmp, IPPROTO_ICMP))
 	{
-		fprintf(stderr, "ft_nmap: can't connect to '%s' host\n", host->host);
+		fprintf(stderr, RED "ft_nmap: can't connect to '%s' host\n" DEFAULT, host->host);
 		return (0);
 	}
 	return (1);
@@ -54,14 +54,14 @@ static void build_addr(t_host *host)
 	host->addrlen = sizeof(*host->addr);
 	if (!(host->addr = malloc(host->addrlen)))
 	{
-		fprintf(stderr, "ft_nmap: can't malloc new addr\n");
+		fprintf(stderr, RED "ft_nmap: can't malloc new addr\n" DEFAULT);
 		exit(EXIT_FAILURE);
 	}
 	ft_memset(host->addr, 0, host->addrlen);
 	host->addr->sa_family = AF_INET;
 	if ((tmp = inet_addr(host->ip)) == INADDR_NONE)
 	{
-		fprintf(stderr, "ft_nmap: can't get binary ip\n");
+		fprintf(stderr, RED "ft_nmap: can't get binary ip\n" DEFAULT);
 		exit(EXIT_FAILURE);
 	}
 	ft_memcpy(host->addr->sa_data + 2, &tmp, sizeof(tmp));
@@ -74,23 +74,23 @@ static void resolve_ip(t_host *host)
 
 	if (!(hostent = gethostbyname(host->host)))
 	{
-		fprintf(stderr, "ft_nmap: can't resolve ip\n");
+		fprintf(stderr, RED "ft_nmap: can't resolve ip\n" DEFAULT);
 		exit(EXIT_FAILURE);
 	}
 	if (hostent->h_addrtype != AF_INET)
 	{
-		fprintf(stderr, "ft_nmap: ip isn't ipv4\n");
+		fprintf(stderr, RED "ft_nmap: ip isn't ipv4\n" DEFAULT);
 		exit(EXIT_FAILURE);
 	}
 	if (hostent->h_length < 1)
 	{
-		fprintf(stderr, "ft_nmap: can't resolve ip\n");
+		fprintf(stderr, RED "ft_nmap: can't resolve ip\n" DEFAULT);
 		exit(EXIT_FAILURE);
 	}
 	tmp = (struct in_addr*)hostent->h_addr_list[0];
 	if (!(host->ip = inet_ntoa(*tmp)))
 	{
-		fprintf(stderr, "ft_nmap: can't get ip string\n");
+		fprintf(stderr, RED "ft_nmap: can't get ip string\n" DEFAULT);
 		exit(EXIT_FAILURE);
 	}
 	host->ip = ft_strdup(host->ip);
@@ -106,7 +106,7 @@ void build_hosts(t_env *env)
 	{
 		if (!(host = malloc(sizeof(*host))))
 		{
-			fprintf(stderr, "ft_nmap: can't malloc host struct\n");
+			fprintf(stderr, RED "ft_nmap: can't malloc host struct\n" DEFAULT);
 			exit(EXIT_FAILURE);
 		}
 		ft_memset(host, 0, sizeof(*host));
@@ -139,7 +139,7 @@ void build_hosts(t_env *env)
 		build_addr(host);
 		if (pthread_mutex_init(&host->mutex_tcp, NULL) || pthread_mutex_init(&host->mutex_icmp, NULL))
 		{
-			fprintf(stderr, "ft_nmap: can't init pthread mutex\n");
+			fprintf(stderr, RED "ft_nmap: can't init pthread mutex\n" DEFAULT);
 			exit(EXIT_FAILURE);
 		}
 		push_host(env, host);

@@ -19,7 +19,7 @@ void scan_port_tcp(t_thread_arg *thread_arg, struct iphdr *ip_header, void (*for
 	{
 		if (sendto(thread_arg->host->socket_tcp, &packet, sizeof(packet), 0, thread_arg->host->addr, thread_arg->host->addrlen) == -1)
 		{
-			fprintf(stderr, "ft_nmap: failed to send packet\n");
+			fprintf(stderr, RED "ft_nmap: failed to send packet\n" DEFAULT);
 			exit(EXIT_FAILURE);
 		}
 		int looper = 0;
@@ -35,7 +35,7 @@ void scan_port_tcp(t_thread_arg *thread_arg, struct iphdr *ip_header, void (*for
 			fds.revents = 0;
 			if (poll(&fds, 0, 100) == -1)
 			{
-				fprintf(stderr, "ft_nmap: poll failed");
+				fprintf(stderr, RED "ft_nmap: poll failed\n" DEFAULT);
 				exit(EXIT_FAILURE);
 			}
 			looper++;

@@ -16,7 +16,7 @@ int16_t tcp_checksum(t_tcp_packet *packet, int pton_addr)
 	pseudo_hdr.len = htons(len);
 	if (!(result = malloc(len + sizeof(pseudo_hdr))))
 	{
-		fprintf(stderr, "ft_nmap: can't build tcp checksum\n");
+		fprintf(stderr, RED "ft_nmap: can't build tcp checksum\n" DEFAULT);
 		exit(EXIT_FAILURE);
 	}
 	ft_memcpy(result, &pseudo_hdr, sizeof(pseudo_hdr));

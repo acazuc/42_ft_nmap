@@ -5,26 +5,25 @@ char *get_scan_result_str(char *type, enum e_port_status result)
 	char *status;
 	char *rslt;
 
-	status = "";
 	if (result == OPEN)
-		status = "Open";
+		status = WHITE "(" GREEN "Open" WHITE WHITE WHITE ")";
 	else if (result == FILTERED)
-		status = "Filtered";
+		status = WHITE "(" PEACHY "Filtered" WHITE WHITE WHITE ")";
 	else if (result == CLOSED)
-		status = "Closed";
+		status = WHITE "(" RED "Closed" WHITE WHITE WHITE ")";
 	else if (result == UNFILTERED)
-		status = "Unfiltered";
+		status = WHITE "(" YELLOW "Unfiltered" WHITE WHITE WHITE ")";
 	else if (result == OPEN_FILTERED)
-		status = "Open|Filtered";
-	if (!(rslt = malloc(ft_strlen(type) + ft_strlen(status) + 3)))
+		status = WHITE "(" GREEN "Open" WHITE "|" PEACHY "Filtered" WHITE ")";
+	else	
+		status = "";
+	if (!(rslt = malloc(ft_strlen(type) + ft_strlen(status) + 1)))
 	{
-		fprintf(stderr, "ft_nmap: can't malloc result string\n");
+		fprintf(stderr, RED "ft_nmap: can't malloc result string\n" DEFAULT);
 		exit(EXIT_FAILURE);
 	}
-	ft_memset(rslt, 0, ft_strlen(type) + ft_strlen(status) + 3);
+	ft_memset(rslt, 0, ft_strlen(type) + ft_strlen(status) + 1);
 	rslt = ft_strcat(rslt, type);
-	rslt = ft_strcat(rslt, "(");
 	rslt = ft_strcat(rslt, status);
-	rslt = ft_strcat(rslt, ")");
 	return (rslt);
 }

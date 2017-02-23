@@ -6,6 +6,6 @@ char *get_service_name(int port)
 
 	result = getservbyport(htons(port), NULL);
 	if (!result)
-		return ("Unassigned");
+		return ("unassigned");
 	return (result->s_name);
 }

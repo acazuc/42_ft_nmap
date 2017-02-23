@@ -6,7 +6,7 @@ size_t epoch_micro(void)
 
 	if (gettimeofday(&tv, NULL))
 	{
-		fprintf(stderr, "ft_nmap: can't get time\n");
+		fprintf(stderr, RED "ft_nmap: can't get time\n" DEFAULT);
 		exit(EXIT_FAILURE);
 	}
 	return (tv.tv_sec * 1000000 + tv.tv_usec);

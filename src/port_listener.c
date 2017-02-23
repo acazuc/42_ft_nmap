@@ -14,7 +14,7 @@ static t_tcp_packet *packet_tcp_alloc(void)
 
 	if (!(packet = malloc(sizeof(*packet))))
 	{
-		fprintf(stderr, "ft_nmap: can't malloc packet\n");
+		fprintf(stderr, RED "ft_nmap: can't malloc packet\n" DEFAULT);
 		exit(EXIT_FAILURE);
 	}
 	return (packet);
@@ -26,7 +26,7 @@ static t_icmp_packet *packet_icmp_alloc(void)
 
 	if (!(packet = malloc(sizeof(*packet))))
 	{
-		fprintf(stderr, "ft_nmap: can't malloc packet\n");
+		fprintf(stderr, RED "ft_nmap: can't malloc packet\n" DEFAULT);
 		exit(EXIT_FAILURE);
 	}
 	return (packet);
@@ -86,38 +86,38 @@ void *port_listener(void *data)
 	arg = (t_thread_arg*)data;
 	if (pcap_lookupnet("any", &netp, &maskp, errbuf) == -1)
 	{
-		fprintf(stderr, "ft_nmap: pcap_lookupnet failed: %s\n", errbuf);
+		fprintf(stderr, RED "ft_nmap: pcap_lookupnet failed: %s\n" DEFAULT, errbuf);
 		exit(EXIT_FAILURE);
 	}
 	if (!(pcap_obj = pcap_open_live("any", BUFSIZ, 0, -1, errbuf)))
 	{
-		fprintf(stderr, "ft_nmap: pcap_open_live failed: %s\n", errbuf);
+		fprintf(stderr, RED "ft_nmap: pcap_open_live failed: %s\n" DEFAULT, errbuf);
 		exit(EXIT_FAILURE);
 	}
 	if (!(str = ft_strjoin("host ", arg->host->ip)))
 	{
-		fprintf(stderr, "ft_nmap: ft_strjoin failed\n");
+		fprintf(stderr, RED "ft_nmap: ft_strjoin failed\n" DEFAULT);
 		exit(EXIT_FAILURE);
 	}
 	if (!(str = ft_strjoin_free1(str, " and (tcp or icmp)")))
 	{
-		fprintf(stderr, "ft_nmap: ft_strjoin failed\n");
+		fprintf(stderr, RED "ft_nmap: ft_strjoin failed\n" DEFAULT);
 		exit(EXIT_FAILURE);
 	}
 	if (pcap_compile(pcap_obj, &fp, str, 1, netp) == -1)
 	{
-		fprintf(stderr, "ft_nmap: pcap_compile failed\n");
+		fprintf(stderr, RED "ft_nmap: pcap_compile failed\n" DEFAULT);
 		exit(EXIT_FAILURE);
 	}
 	if (pcap_setfilter(pcap_obj, &fp) == -1)
 	{
-		fprintf(stderr, "ft_nmap: pcap_setfilter failed\n");
+		fprintf(stderr, RED "ft_nmap: pcap_setfilter failed\n" DEFAULT);
 		exit(EXIT_FAILURE);
 	}
 	signal(SIGALRM, sigalrm_handler);
 	if (pcap_loop(pcap_obj, -1, packet_callback, (u_char*)data) == -1)
 	{
-		fprintf(stderr, "ft_nmap: pcap_loop failed\n");
+		fprintf(stderr, RED "ft_nmap: pcap_loop failed\n" DEFAULT);
 		exit(EXIT_FAILURE);
 	}
 	free(str);

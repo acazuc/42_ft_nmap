@@ -21,7 +21,7 @@ void parse_params(t_env *env, int ac, char **av)
 			parse_scan(env, av[++i]);
 		else
 		{
-			fprintf(stderr, "ft_nmap: unknown argument '%s'\n", av[i]);
+			fprintf(stderr, RED "ft_nmap: unknown argument '%s'\n" DEFAULT, av[i]);
 			print_help();
 		}
 		i++;

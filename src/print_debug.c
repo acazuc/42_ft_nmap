@@ -15,24 +15,25 @@ static void print_hosts(t_env *env)
 static void print_scans(t_env *env)
 {
 	if (env->type_syn)
-		printf(" SYN");
+		printf(RED " SYN");
 	if (env->type_null)
-		printf(" NULL");
+		printf(PEACHY " NULL");
 	if (env->type_ack)
-		printf(" ACK");
+		printf(YELLOW" ACK");
 	if (env->type_fin)
-		printf(" FIN");
+		printf(GREEN" FIN");
 	if (env->type_xmas)
-		printf(" XMAS");
+		printf(SKY" XMAS");
 	if (env->type_udp)
-		printf(" UDP");
+		printf(BLUE" UDP");
 }
 
 void print_debug(t_env *env)
 {
-	printf("Scan Configurations\nTarget ip addresses: ");
+	printf(SKY "Scan Configurations\n" GREY "Target ip addresses" WHITE ": " GREEN);
 	print_hosts(env);
-	printf("\nNumber of ports to scan: %d\nScans to be performed:", get_ports_number(env));
+	printf(GREY "\nNumber of ports to scan" WHITE ": " BLUE "%d"
+		GREY "\nScans to be performed" WHITE ":", get_ports_number(env));
 	print_scans(env);
-	printf("\nNumber of threads: %d\n", env->threads_nb);
+	printf(GREY "\nNumber of threads" WHITE ": " RED "%d\n", env->threads_nb);
 }
