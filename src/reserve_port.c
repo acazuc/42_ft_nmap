@@ -6,7 +6,7 @@
 /*   By: acazuc <acazuc@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/10/16 11:37:12 by acazuc            #+#    #+#             */
-/*   Updated: 2018/04/23 18:22:29 by acazuc           ###   ########.fr       */
+/*   Updated: 2018/04/23 18:26:51 by acazuc           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,6 @@ void reserve_port(t_env *env)
 		if (bind(sockfd, (struct sockaddr*)&sa, sizeof(sa)) == 0)
 		{
 			env->port = tmp;
-			printf("port: %u\n", env->port);
 			return;
 		}
 		++i;
