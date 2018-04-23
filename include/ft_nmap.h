@@ -203,5 +203,6 @@ int packet_get_icmp(t_host *host, int port);
 void resolve_self_ip(t_env *env);
 void reserve_port(t_env *env);
 int get_send_ip(t_thread_arg *arg);
+unsigned int lcrandom();
 
 #endif
