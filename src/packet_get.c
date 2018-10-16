@@ -1,6 +1,6 @@
 #include "ft_nmap.h"
 
-t_tcp_packet *packet_get_tcp(t_host *host, int port, uint32_t sequence, char *type)
+t_tcp_packet *packet_get_tcp(t_host *host, uint16_t port, uint32_t sequence, char *type)
 {
 	t_tcp_packet_list *lst;
 
@@ -19,7 +19,7 @@ t_tcp_packet *packet_get_tcp(t_host *host, int port, uint32_t sequence, char *ty
 	return (NULL);
 }
 
-int packet_get_icmp(t_host *host, int port)
+int packet_get_icmp(t_host *host, uint16_t port)
 {
 	t_icmp_packet_list *lst;
 	uint16_t tmp_port;

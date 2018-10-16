@@ -1,6 +1,6 @@
 #include "ft_nmap.h"
 
-void packet_flush_tcp(t_host *host, int port)
+void packet_flush_tcp(t_host *host, uint16_t port)
 {
 	t_tcp_packet_list *lst;
 	t_tcp_packet_list *prv;
@@ -32,7 +32,7 @@ void packet_flush_tcp(t_host *host, int port)
 	pthread_mutex_unlock(&host->mutex_tcp);
 }
 
-void packet_flush_icmp(t_host *host, int port)
+void packet_flush_icmp(t_host *host, uint16_t port)
 {
 	t_icmp_packet_list *lst;
 	t_icmp_packet_list *prv;
@@ -55,7 +55,7 @@ void packet_flush_icmp(t_host *host, int port)
 		}
 		ft_memcpy(&tmp_port, lst->packet->data + sizeof(struct iphdr) + 2, sizeof(tmp_port));
 		tmp_port = ntohs(tmp_port);
-		if (tmp_port == (uint16_t)port)
+		if (tmp_port == port)
 		{
 			if (!prv)
 				host->packets_icmp = lst->next;

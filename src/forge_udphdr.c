@@ -1,6 +1,6 @@
 #include "ft_nmap.h"
 
-void forge_udphdr(t_env *env, t_udp_packet *packet, int16_t port, int pton_addr)
+void forge_udphdr(t_env *env, t_udp_packet *packet, uint16_t port, int pton_addr)
 {
 	ft_memset(&packet->udp_header, 0, sizeof(packet->udp_header));
 	packet->udp_header.source = htons(env->port);

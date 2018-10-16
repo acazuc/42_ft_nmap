@@ -1,6 +1,6 @@
 #include "ft_nmap.h"
 
-char *get_service_name(int port)
+char *get_service_name(uint16_t port)
 {
 	struct servent *result;
 

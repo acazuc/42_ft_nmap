@@ -1,10 +1,8 @@
 #include "ft_nmap.h"
 
+unsigned int rnd;
+
 unsigned int lcrandom()
 {
-	static volatile unsigned int rnd = 0;
-	
-	if (!rnd)
-		rnd = epoch_micro();
-	return (rnd = rnd * 48271);
+	return (rnd  = rnd * 1664525 + 1013904223);
 }

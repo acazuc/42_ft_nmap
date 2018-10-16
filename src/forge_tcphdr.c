@@ -1,6 +1,6 @@
 #include "ft_nmap.h"
 
-static void forge_tcphdr_common(t_env *env, struct tcphdr *header, int16_t port)
+static void forge_tcphdr_common(t_env *env, struct tcphdr *header, uint16_t port)
 {
 	ft_memset(header, 0, sizeof(*header));
 	header->source = htons(env->port);
@@ -19,34 +19,34 @@ static void forge_tcphdr_common(t_env *env, struct tcphdr *header, int16_t port)
 	header->urg_ptr = 0;
 }
 
-void forge_tcphdr_syn(t_env *env, t_tcp_packet *packet, int16_t port, int pton_addr)
+void forge_tcphdr_syn(t_env *env, t_tcp_packet *packet, uint16_t port, int pton_addr)
 {
 	forge_tcphdr_common(env, &packet->tcp_header, port);
 	packet->tcp_header.syn = 1;
 	packet->tcp_header.check = tcp_checksum(packet, pton_addr);
 }
 
-void forge_tcphdr_null(t_env *env, t_tcp_packet *packet, int16_t port, int pton_addr)
+void forge_tcphdr_null(t_env *env, t_tcp_packet *packet, uint16_t port, int pton_addr)
 {
 	forge_tcphdr_common(env, &packet->tcp_header, port);
 	packet->tcp_header.check = tcp_checksum(packet, pton_addr);
 }
 
-void forge_tcphdr_ack(t_env *env, t_tcp_packet *packet, int16_t port, int pton_addr)
+void forge_tcphdr_ack(t_env *env, t_tcp_packet *packet, uint16_t port, int pton_addr)
 {
 	forge_tcphdr_common(env, &packet->tcp_header, port);
 	packet->tcp_header.ack = 1;
 	packet->tcp_header.check = tcp_checksum(packet, pton_addr);
 }
 
-void forge_tcphdr_fin(t_env *env, t_tcp_packet *packet, int16_t port, int pton_addr)
+void forge_tcphdr_fin(t_env *env, t_tcp_packet *packet, uint16_t port, int pton_addr)
 {
 	forge_tcphdr_common(env, &packet->tcp_header, port);
 	packet->tcp_header.fin = 1;
 	packet->tcp_header.check = tcp_checksum(packet, pton_addr);
 }
 
-void forge_tcphdr_xmas(t_env *env, t_tcp_packet *packet, int16_t port, int pton_addr)
+void forge_tcphdr_xmas(t_env *env, t_tcp_packet *packet, uint16_t port, int pton_addr)
 {
 	forge_tcphdr_common(env, &packet->tcp_header, port);
 	packet->tcp_header.fin = 1;

@@ -44,7 +44,7 @@ static void print_result_port_mult_part(char *type, enum e_port_status status, i
 	free(tmp);
 }
 
-static void print_result_port_mult(t_env *env, t_port_result *result, int port)
+static void print_result_port_mult(t_env *env, t_port_result *result, uint16_t port)
 {
 	int i;
 	char *service = get_service_name(port);
@@ -66,7 +66,7 @@ static void print_result_port_mult(t_env *env, t_port_result *result, int port)
 	printf("%-10s\n\n", get_scan_conclusion(env, result));
 }
 
-static void print_result_port(t_env *env, t_port_result *result, int port)
+static void print_result_port(t_env *env, t_port_result *result, uint16_t port)
 {
 	char *tmp;
 	char *service = get_service_name(port);

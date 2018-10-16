@@ -1,6 +1,6 @@
 #include "ft_nmap.h"
 
-void scan_port_udp(t_thread_arg *thread_arg, struct iphdr *ip_header, int port)
+void scan_port_udp(t_thread_arg *thread_arg, struct iphdr *ip_header, uint16_t port)
 {
 	t_udp_packet packet;
 	int received;
