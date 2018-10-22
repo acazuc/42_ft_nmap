@@ -19,13 +19,19 @@ static void init_buff_result(char **buff, char **result)
 static ssize_t loop_read(char **result, char **buff, int fd)
 {
 	ssize_t readed;
+	int count;
 
+	count = 0;
 	while ((readed = read(fd, *buff, 1000)) > 0)
 	{
 		if (!(*result = ft_strjoin_free1(*result, *buff)))
 		{
 			fprintf(stderr, RED "ft_mnap: can't malloc file content\n" DEFAULT);
 			exit(EXIT_FAILURE);
+		}
+		if ((count += readed) > 1024 * 1024)
+		{
+			fprintf(stderr, RED "ft_nmap: file too long\n", DEFAULT);
 		}
 		ft_memset(*buff, 0, 1001);
 	}

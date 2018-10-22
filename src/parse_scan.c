@@ -26,6 +26,11 @@ void parse_scan(t_env *env, char *scans)
 	char **splitted;
 	int i;
 
+	if (!scans)
+	{
+		fprintf(stderr, RED "ft_nmap: expected scan type after --scan\n" DEFAULT);
+		exit(EXIT_FAILURE);
+	}
 	env->defined_scans = 1;
 	if (!(splitted = ft_strsplit(scans, ',')))
 	{
