@@ -15,7 +15,7 @@ void scan_port_tcp(t_thread_arg *thread_arg, struct iphdr *ip_header, void (*for
 	packet_flush_tcp(thread_arg->host, port);
 	received = 0;
 	retry = 0;
-	while (retry < 3 && !received)
+	while (retry < 5 && !received)
 	{
 		if (sendto(thread_arg->host->socket_tcp, &packet, sizeof(packet), 0, thread_arg->host->addr, thread_arg->host->addrlen) == -1)
 		{
@@ -23,7 +23,7 @@ void scan_port_tcp(t_thread_arg *thread_arg, struct iphdr *ip_header, void (*for
 			exit(EXIT_FAILURE);
 		}
 		int looper = 0;
-		while (looper < 10)
+		while (looper < 20)
 		{
 			if ((recv_packet = packet_get_tcp(thread_arg->host, port, sequence, type)))
 			{

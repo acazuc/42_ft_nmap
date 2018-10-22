@@ -94,7 +94,7 @@ void *port_listener(void *data)
 		fprintf(stderr, RED "ft_nmap: pcap_open_live failed: %s\n" DEFAULT, errbuf);
 		exit(EXIT_FAILURE);
 	}
-	if (!(str = ft_strjoin("host ", arg->host->ip)))
+	if (!(str = ft_strjoin("src ", arg->host->ip)))
 	{
 		fprintf(stderr, RED "ft_nmap: ft_strjoin failed\n" DEFAULT);
 		exit(EXIT_FAILURE);
