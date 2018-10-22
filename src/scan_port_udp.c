@@ -12,7 +12,7 @@ void scan_port_udp(t_thread_arg *thread_arg, struct iphdr *ip_header, uint16_t p
 	packet_flush_icmp(thread_arg->host, port);
 	received = 0;
 	retry = 0;
-	while (retry < 3 && !received)
+	while (retry < 5 && !received)
 	{
 		if (sendto(thread_arg->host->socket_udp, &packet, sizeof(packet), 0, thread_arg->host->addr, thread_arg->host->addrlen) == -1)
 		{
@@ -20,7 +20,7 @@ void scan_port_udp(t_thread_arg *thread_arg, struct iphdr *ip_header, uint16_t p
 			exit(EXIT_FAILURE);
 		}
 		int looper = 0;
-		while (looper < 10)
+		while (looper < 20)
 		{
 			if (packet_get_icmp(thread_arg->host, port))
 			{
