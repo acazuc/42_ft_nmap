@@ -31,7 +31,7 @@ static ssize_t loop_read(char **result, char **buff, int fd)
 		}
 		if ((count += readed) > 1024 * 1024)
 		{
-			fprintf(stderr, RED "ft_nmap: file too long\n", DEFAULT);
+			fprintf(stderr, RED "ft_nmap: file too long\n" DEFAULT);
 		}
 		ft_memset(*buff, 0, 1001);
 	}
