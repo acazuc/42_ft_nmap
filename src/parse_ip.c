@@ -19,7 +19,7 @@ void parse_ip(t_env *env, char *ip)
 	}
 	if (!(env->ips[0] = ft_strdup(ip)))
 	{
-		fprintf(stderr, RED "ft_nmap: can't dup ip\n" DEFALUT);
+		fprintf(stderr, RED "ft_nmap: can't dup ip\n" DEFAULT);
 		exit(EXIT_FAILURE);
 	}
 	env->ips[1] = NULL;
